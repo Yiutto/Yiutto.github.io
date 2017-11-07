@@ -86,26 +86,28 @@ Markdown是什么？Markdown是一种轻量级的**标记语言**，它允许人
 
 ## 代码区域
 
-对于程序员来说，有的时候需要插入代码；Markdown提供了优雅的代码区域，只需要用两个"'''"把中间的代码包裹起来即可；如果在第一个后面加上所使用的语言即可语法高亮显示。
+对于程序员来说，有的时候需要插入代码；Markdown提供了优雅的代码区域，只需要用两个(3个 ** ` **就是tab键上面的)把中间的代码包裹起来即可；如果在第一个后面加上所使用的语言即可语法高亮显示。
 
 *Markdown语法如下：*
 
-    ``` c
-    int Main(string[] args)
-    {
-        Console.WriteLine("hello world");
-        return 0;
-    }
-    ```
+```
+	''' c
+		int Main(string[] args)
+		{
+			Console.WriteLine("hello world");
+			return 0;
+		}
+	'''
+```
 
 *实现效果：*
 
 ``` c
-int Main(string[] args)
-{
-    Console.WriteLine("hello world");
-    return 0;
-}
+	int Main(string[] args)
+	{
+		Console.WriteLine("hello world");
+		return 0;
+	}
 ```
 
 此外，如果代码很少，几个单词的长度之类的；也可以使用两个"`"把代码包裹起来显示。
