@@ -3,6 +3,8 @@ title: MarkDown Learning
 date: 2017-10-19 00:40:06
 categories: Blog
 tags: markdown
+photos:
+   - /gallery/markdown.jpg
 ---
 我们大多数人或多或少会写一些文档，或者是随笔，可能因为工作，可能因为个人爱好；而如果我们是用word来完成我们的写作，其实是一件很麻烦的事，我们不否认word功能的强大，能给出我们提供非常漂亮的布局，但是如果对word不是很熟悉，就会在排版上花很多时间，不能专心在写作上；但是如果使用时记事本之类的，又不能够有很好的阅读体验；有什么可以解决我们的痛点呢？答案是**Markdown** !
 

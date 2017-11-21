@@ -6,6 +6,8 @@ tags:
 	- git
 	- markdown
 	- hexo
+photos:
+   - /gallery/hexo-blog.png
 ---
 
 
