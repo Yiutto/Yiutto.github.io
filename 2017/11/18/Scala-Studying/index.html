@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>spark之scala studying | Programming prodigal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="scala" />
+  
+  
+  
+  
+  <meta name="description" content="一、前言这是一篇使用Scala的一些总结。 作为大数据来说，学习好spark这是必备技能，要想更容易得用spark，必须学会Scala基本语法，spark就是用Scala写的。 Scala它以JVM为目标环境，将面向对象和函数式编程有机地结合在一起。结合快学Scala作的自我总结，方便后期自己阅读。">
+<meta name="keywords" content="scala">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark之Scala Studying">
+<meta property="og:url" content="http://github.com/2017/11/18/Scala-Studying/index.html">
+<meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="一、前言这是一篇使用Scala的一些总结。 作为大数据来说，学习好spark这是必备技能，要想更容易得用spark，必须学会Scala基本语法，spark就是用Scala写的。 Scala它以JVM为目标环境，将面向对象和函数式编程有机地结合在一起。结合快学Scala作的自我总结，方便后期自己阅读。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://github.com/gallery/scala.jpg">
+<meta property="og:updated_time" content="2017-11-21T03:48:24.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark之Scala Studying">
+<meta name="twitter:description" content="一、前言这是一篇使用Scala的一些总结。 作为大数据来说，学习好spark这是必备技能，要想更容易得用spark，必须学会Scala基本语法，spark就是用Scala写的。 Scala它以JVM为目标环境，将面向对象和函数式编程有机地结合在一起。结合快学Scala作的自我总结，方便后期自己阅读。">
+<meta name="twitter:image" content="http://github.com/gallery/scala.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/logo.png">
+  <link rel="apple-touch-icon" href="/css/images/logo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 border-width: 0px;  margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="176px" height="78px" alt="Hike News" src="/css/images/logo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/mybooks">books</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/favorites">favorites</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Scala-Studying" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/gallery/scala.jpg" rel="gallery_cja93axwe000fagqqoobdt45g">
+        <img src="/gallery/scala.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Spark之Scala Studying
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+	  <table style="margin:0 auto;">
+		<tr>
+		  <td>
+	<a href="/2017/11/18/Scala-Studying/" class="article-date">
+	  <time datetime="2017-11-18T02:38:05.000Z" itemprop="datePublished">2017-11-18</time>
+	</a>
+</td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li></ul>
+</td>
+		  <td>
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+</td>
+		</tr>
+	  </table>
+    </div>  
+  
+	<div class="article-entry" itemprop="articleBody">
+        <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>这是一篇使用Scala的一些总结。</p>
+<p>作为大数据来说，学习好spark这是必备技能，要想更容易得用spark，必须学会Scala基本语法，spark就是用Scala写的。</p>
+<p>Scala它以JVM为目标环境，将面向对象和函数式编程有机地结合在一起。结合快学Scala作的自我总结，方便后期自己阅读。</p>
+<a id="more"></a>
+<h1 id="二、相关介绍"><a href="#二、相关介绍" class="headerlink" title="二、相关介绍"></a>二、相关介绍</h1><p>版本：Spark version 2.0.2    Scala version 2.11.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_121)</p>
+<h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1.基础"></a>1.基础</h2><h3 id="1-1-声明变量"><a href="#1-1-声明变量" class="headerlink" title="1.1 声明变量"></a>1.1 声明变量</h3><p>val 和 var之间的区别：val定义常量，var定义变量，必须给出变量的类型</p>
+<p>eg：<code>val String a = “yiutto”</code></p>
+<h3 id="1-2-Scala-Doc"><a href="#1-2-Scala-Doc" class="headerlink" title="1.2 Scala Doc"></a>1.2 Scala Doc</h3><p>你可以在<a href="http://www.scala-lang.org/api" target="_blank" rel="external">www.scala-lang.org/api</a>在线浏览Scaladoc。</p>
+<h2 id="2-控制结构和函数"><a href="#2-控制结构和函数" class="headerlink" title="2.控制结构和函数"></a>2.控制结构和函数</h2><h3 id="2-1-条件表达式"><a href="#2-1-条件表达式" class="headerlink" title="2.1 条件表达式"></a>2.1 条件表达式</h3><p>if/else , 可以把()当做是表示“无有用值”的占位符，将Unit当做Java或C/C++中的void。<br>eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">if</span> (x &gt; <span class="number">0</span>) &#123; <span class="number">1</span></div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (x == <span class="number">0</span>) &#123; <span class="number">0</span></div><div class="line">&#125; <span class="keyword">else</span> <span class="number">-1</span></div></pre></td></tr></table></figure>
+<p>从技术上讲，void没有值但是Unit有一个表示“无值”的值。如果你一定要深究的话，这就好比空的钱包和里面有一张写着“没钱”的无面值钞票的钱包之间的区别。</p>
+<p><strong>说明：</strong>Scala没有switch语句，不过它有一个强大很多的模式匹配机制。</p>
+<h3 id="2-2-循环"><a href="#2-2-循环" class="headerlink" title="2.2 循环"></a>2.2 循环</h3><p>Scala拥有与Java和C++相同的while和do循环。</p>
+<p><strong>说明：</strong>在for循环的变量之前并没有val或var的指定。Scala并没有提供break或continue语句来退出循环。那么如果需要break时我们该怎么做？</p>
+<p>1.使用Boolean型的控制变量。<br>2.使用嵌套函数–你可以从函数当中return。<br>3.使用Breaks对象中的break方法：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> scala.util.control.<span class="type">Breaks</span>._</div><div class="line">breakable &#123;</div><div class="line">  <span class="keyword">for</span> (...) &#123;</div><div class="line">    <span class="keyword">if</span> (...) <span class="keyword">break</span>; <span class="comment">// 退出breakable块</span></div><div class="line">	...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里，控制权的转移是通过抛出和捕获异常完成的，因此，如果时间很重要的话，你应该尽量避免使用这套机制。</p>
+<p><strong>高级for循环和推导式</strong></p>
+<p><code>for (i &lt;- 1 to 3; j &lt;- 1 to 3 if i != j) println((10 * i + j) + &quot; &quot;)// 将打印 12 13 21 23 31 32</code></p>
+<p><code>for ( i &lt;- 1 to 10) yield i % 3  // 生成Vector（1，2，0，1，2，0，1，2，0，1）</code></p>
+<h3 id="2-3-函数"><a href="#2-3-函数" class="headerlink" title="2.3 函数"></a>2.3 函数</h3><p><code>def abs(x: Double) = if ( x &gt;= 0) x else -x</code></p>
+<p><strong>提示：</strong>虽然在带名函数中使用return并没有什么不对，我们最好适应没有return的日子。很快，你就会使用大量匿名函数，这些函数中return并不返回值给调用者。它跳出到包含它的带名函数中。我们可以把return当做是函数版的break语句，仅在需要时使用。</p>
+<p><strong>变长参数</strong></p>
+<h2 id="4-映射与元祖"><a href="#4-映射与元祖" class="headerlink" title="4.映射与元祖"></a>4.映射与元祖</h2><h3 id="4-1-映射"><a href="#4-1-映射" class="headerlink" title="4.1 映射"></a>4.1 映射</h3><p>不可变映射，eg：<code>val scores = Map(&quot;Alice&quot; -&gt; 10)</code>，其值不能被改变。</p>
+<p>可变映射，eg：<code>val scores = scala.collection.mutable.Map(&quot;Alice&quot; -&gt; 10)</code></p>
+<p>定义一个空的映射，eg：<code>val scores = new scala.collection.mutable.HashMap[String, Int]</code></p>
+<h3 id="4-2-取映射中的值"><a href="#4-2-取映射中的值" class="headerlink" title="4.2 取映射中的值"></a>4.2 取映射中的值</h3><p>eg1：<code>val bobScore = scores(&quot;Bob&quot;) //类似于Java中的scores.get(&quot;Bob&quot;)</code><br>eg2：<code>val bobScore = socres.getOrElse(&quot;Bob&quot;, 0) //如果映射包含键”Bob“，返回对应的值；否则，返回0</code></p>
+<p>最后，映射.get(键)这样的调用返回一个Option对象，要么是Some（键对应的值），要么是None。</p>
+<h3 id="4-3-更新映射中的值"><a href="#4-3-更新映射中的值" class="headerlink" title="4.3 更新映射中的值"></a>4.3 更新映射中的值</h3><p>eg1：<code>scores(&quot;Bob&quot;) = 0</code></p>
+<p>eg2: <code>scores += (&quot;Bob&quot; -&gt; 10, &quot;Fred&quot; -&gt; 7) //添加新的键-值对，假设映射是可变的</code></p>
+<p>你不能更新一个不可变的映射，但你可以做一些同样有用的操作—-获取一个包含所需要的更新的新映射</p>
+<p>eg3：`val newScores = scores + (“Bob” -&gt; 10, “Fred” -&gt; 7) //用新的变量重新赋值</p>
+<p>除了把结果作为新值保存外，你也可以更新var变量：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">var scores = ...</div><div class="line">scores = scores + (&quot;Bob&quot; -&gt; 10, &quot;Fred&quot; -&gt; 7)</div></pre></td></tr></table></figure>
+<p>同理，移除某个键，可以用”-“操作符，eg：<code>scores = scores - &quot;Alice&quot;</code></p>
+<h3 id="4-4-已排序映射"><a href="#4-4-已排序映射" class="headerlink" title="4.4 已排序映射"></a>4.4 已排序映射</h3><p>eg1:<br><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">val</span> scores = scala.collection.immutable.<span class="type">SortedMap</span>(<span class="string">"Alice"</span> -&gt; <span class="number">10</span>, <span class="string">"Fred"</span> -&gt;<span class="number">7</span>, <span class="string">"Bob"</span> -&gt; <span class="number">3</span>, <span class="string">"Cindy"</span> -&gt; <span class="number">8</span>) </div><div class="line"><span class="comment">//默认升序`</span></div></pre></td></tr></table></figure></p>
+<p>eg2:<br><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">val</span> months = scala.collection.mutable.<span class="type">LinkedHashMap</span>(<span class="string">"Alice"</span> -&gt; <span class="number">10</span>, <span class="string">"Fred"</span> -&gt;<span class="number">7</span>, <span class="string">"Bob"</span> -&gt; <span class="number">3</span>）</div><div class="line"><span class="comment">//按插入顺序访问所有键，使用LinkedHashMap `</span></div></pre></td></tr></table></figure></p>
+<h3 id="4-5-元组"><a href="#4-5-元组" class="headerlink" title="4.5 元组"></a>4.5 元组</h3><p>映射是键/值对偶的集合。对偶是元组的最简单形态<br>eg1：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">val t = (1, 3.15, &quot;Fred&quot;)</div><div class="line">val (first, second, third) = t</div><div class="line">val (first, second, _) = t</div></pre></td></tr></table></figure></p>
+<p>元组可以用于函数需要返回不止一个值的情况。举例来说，StringOps的partition方法返回的是一对字符串，分别包含了满足某个条件和不满足该条件的字符：</p>
+<p>eg2：` “New York”.partition(_.isUpper) //输出对偶（“NY”，“ew ork”）</p>
+<h3 id="4-6-拉链操作"><a href="#4-6-拉链操作" class="headerlink" title="4.6 拉链操作"></a>4.6 拉链操作</h3><p>使用元组就是为了把多个值绑在一起，通常用zip方法完成。</p>
+<p>eg：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">val symbols = Array(&quot;&lt;&quot;, &quot;-&quot;, &quot;&gt;&quot;)</div><div class="line">val counts = Array(2, 10, 1)</div><div class="line">val pairs = symbols.zip(counts)</div><div class="line">输出Array((&quot;&lt;&quot;, 2), (&quot;-&quot;, 10), (&quot;&gt;&quot;, 1))</div></pre></td></tr></table></figure></p>
+<h2 id="5-类"><a href="#5-类" class="headerlink" title="5.类"></a>5.类</h2><h3 id="5-1-简单类和无参方法"><a href="#5-1-简单类和无参方法" class="headerlink" title="5.1 简单类和无参方法"></a>5.1 简单类和无参方法</h3><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> value = <span class="number">0</span> <span class="comment">//你必须初始化字段</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">increment</span></span>() &#123; <span class="comment">//方法默认是公有的</span></div><div class="line">    value += <span class="number">1</span></div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">current</span></span>() = value</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用该类需要做的就是构造对象并按照通常的方式来调用方法：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">val</span> myCounter = <span class="keyword">new</span> <span class="type">Counter</span>()</div><div class="line">myCounter.increment()</div><div class="line">println(myCounter.current)</div></pre></td></tr></table></figure>
+<p>调用无参数方法（比如current），可以不用写圆括号；一般来说，对于<strong>改值器</strong>方法（即改变对象状态的方法，eg：increment()）使用()，面对于<strong>取值器</strong>方法（不会改变对象状态，eg：current()）去掉()是不错的习惯风格。</p>
+<h3 id="5-2-带getter和setter的属性"><a href="#5-2-带getter和setter的属性" class="headerlink" title="5.2 带getter和setter的属性"></a>5.2 带getter和setter的属性</h3><p>Scala对每个字段都提供getter和setter方法。在这里，我们定义一个字段：<br><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> age = <span class="number">0</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Scala生成面向JVM的类，其中有一个私有的<strong>age</strong>字段以及对应的<strong>getter</strong>和<strong>setter</strong>方法。在这里这两个方法是公有的，因为我们没有将age声明为private。注意这里是用<strong>var</strong>；如果是<strong>val</strong>，<strong>setter</strong>方法是不能用的（对私有字段而言，getter和setter方法也是私有的）。</p>
+<p>在Scala中，<strong>getter和setter</strong>分别叫做<strong>age</strong>和<strong>age_=</strong>。eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line">println(fred.age) <span class="comment">//调用了fred.age()方法也是私有的）。</span></div><div class="line">fred.age = <span class="number">21</span> <span class="comment">//调用了fred.age_=(21)</span></div></pre></td></tr></table></figure>
+<p><strong>说明：</strong>在Scala中，getter和setter方法并非被命名为getXxx和setXxx，不过它们的意义是一样的。在任何时候你都可以自己重新定义getter和setter方法。eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> privateAge = <span class="number">0</span> <span class="comment">//变为私有并改名</span></div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">age</span> </span>= privateAge</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">age_=</span></span>(newValue: <span class="type">Int</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (newValue &gt; privateAge) privateAge = newValue; <span class="comment">//不能变年轻</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里面虽然<strong>privateAge</strong>是私有的，但是<strong>age</strong>和<strong>age_=</strong>被重新定义（公有的），所以以下代码是可运行的。eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">val</span> fred = <span class="keyword">new</span> <span class="type">Person</span></div><div class="line">fre.age = <span class="number">30</span></div><div class="line">fre.age = <span class="number">22</span></div><div class="line">println(fred.age) <span class="comment">//30</span></div></pre></td></tr></table></figure>
+<p><strong>提示：</strong>Scala对每个字段生成getter和setter方法听上去有点恐怖，不过你可以控制这个过程。</p>
+<ul>
+<li>如果字段是私有的，则getter和setter方法也是私有的。（除非自己重新定义为公有的）</li>
+<li>如果字段是val，则只有getter方法被生成。</li>
+<li>如果不需要任何getter和setter，可以将字段声明为private[this]。</li>
+</ul>
+<h3 id="5-3-只带getter的属性"><a href="#5-3-只带getter的属性" class="headerlink" title="5.3 只带getter的属性"></a>5.3 只带getter的属性</h3><p>有时候你只需要一个<strong>只读</strong>属性，有<em>getter</em>但没有<em>setter</em>。如果属性的值在对象构建完成后就不再改变，则可以使用val字段：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Message</span> </span>&#123;</div><div class="line">  <span class="keyword">val</span> timeStamp = <span class="keyword">new</span> java.util.<span class="type">Date</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Scala会生成一个私有的final字段和一个getter方法，但没有setter。不过，有时候你需要这样一个属性，客户端不能随意改值，但它可以通过某种其他的方式被改变。5.1节中的Counter类就是个很好的例子。从概念上讲，counter有一个current属性，当increment方法被调用时更新，但并没有对应的setter。你不能通过val来实现这样一个属性——val永不改变。你需要提供一个私有字段和一个属性的getter方法，eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> value = <span class="number">0</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">increment</span></span>() &#123; value += <span class="number">1</span> &#125;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">current</span> </span>= value <span class="comment">//声明中没有()</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意，在getter方法的定义中并没有()。因此，你必须以不带圆括号的方式来调用：</p>
+<p><code>val n = myCounter.current  //myCounter.current()这样的调用方式是语法错误的</code></p>
+<p>总结一下，在实现属性时你有如下四个选择：</p>
+<ol>
+<li>var foo: Scala自动合成一个getter和一个setter</li>
+<li>val foo：Scala自动合成一个getter</li>
+<li>由你来定义foo和foo_=方法。</li>
+<li>由你来定义foo方法</li>
+</ol>
+<p><strong>说明；</strong>在Scala中，你不能实现只写属性（即带有setter但不带getter的属性）。</p>
+<p><strong>提示：</strong>当你在Scala类看到字段的时候，记住它和Java或C++中的字段不同。它是一个私有字段，加上getter方法（对val字段而言）或者getter和setter方法（对var字段而言）。</p>
+<h3 id="5-4-对象私有字段"><a href="#5-4-对象私有字段" class="headerlink" title="5.4 对象私有字段"></a>5.4 对象私有字段</h3><p>在Scala中（Java和C++也一样），方法可以访问该类的所有对象的私有字段。eg：<br><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> value = <span class="number">0</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">increment</span></span>() &#123; value += <span class="number">1</span> &#125;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isLess</span></span>(other: <span class="type">Counter</span>) = value &lt; other.value <span class="comment">//可以访问另一个对象的私有字段</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>之所以访问other.value是合法的，是因为other也同样是Counter对象。</p>
+<p>Scala允许我们定义更加严格的访问限制，通过<strong>private[this]</strong>这个修饰符来实现。</p>
+<p><code>private[this] var value = 0  //类似某个对象.value这样的访问将不被允许</code></p>
+<p>这样一来，Counter类的方法只能访问到当前对象的value字段，而不能访问同样是Counter类型的其他对象的该字段。这样的访问有时被称为<em>对象私有的</em>，这在某些OO语言，比如SmallTalk中十分常见。</p>
+<p>对于类私有的字段，Scala生成私有的getter和setter方法。但对于对象私有的字段，Scala根本不会生成getter或setter方法。</p>
+<p><strong>说明：</strong>Scala允许你将访问权赋予指定的类。private[类名]修饰符可以定义仅有指定类的方法可以访问给定的字段。这里的<em>类名</em>必须是当前定义的类，或者是包含该类的外部类。</p>
+<p>在这种情况下，编译器会生成辅助的getter和setter方法，允许外部类访问该字段。这些类将会是公有的，因为JVM并没有更细粒度的访问控制系统，并且它们的名称也会随着JVM实现不同而不同。</p>
+<h3 id="5-5-Bean属性"><a href="#5-5-Bean属性" class="headerlink" title="5.5 Bean属性"></a>5.5 Bean属性</h3><p>当你将Scala字段标注为@BeanProperty时，这样的方法会自动生成。eg：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> scala.reflect.<span class="type">BeanProperty</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="meta">@BeanProperty</span> <span class="keyword">var</span> name: <span class="type">String</span> = )</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>将会生成四个方法：</p>
+<ol>
+<li>name: String</li>
+<li>name_=(newValue: String):Unit</li>
+<li>getName():String</li>
+<li>setName(newValue: String):Unit</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><strong>Scala字段</strong></th>
+<th><strong>生成的方法</strong></th>
+<th><strong>何时使用</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>val/var name</td>
+<td>公有的name、name_=(仅限于var)</td>
+<td>实现一个可以被公开访问并且背后是以字段形式保存的属性</td>
+</tr>
+<tr>
+<td>@BeanProperty val/var name</td>
+<td>公有的name、getName()、name_=(仅限于var)、setName(…)(仅限于var)</td>
+<td>与JavaBeans互操作</td>
+</tr>
+<tr>
+<td>private val/var name</td>
+<td>私有的name、name_=(仅限于var)</td>
+<td>用于将字段访问限制在本类的方法，就和java一样。尽量使用private——除非你真的需要一个公有的属性</td>
+</tr>
+<tr>
+<td>private[this] val/var name</td>
+<td>无</td>
+<td>用于将字段访问限制在同一个对象上调用的方法。并不经常用到</td>
+</tr>
+<tr>
+<td>private[类名] val/var name</td>
+<td>依赖于具体实现</td>
+<td>将访问权赋予外部类。并不经常用到</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-6-辅助构造器"><a href="#5-6-辅助构造器" class="headerlink" title="5.6 辅助构造器"></a>5.6 辅助构造器</h3><p>Scala类有一个构造器比所有构造器都更为重要，它就是主构造器（primary constructor）。除了主构造器之外，类还可以有任意多的<strong>辅助构造器</strong>（auxiliary constructor）。</p>
+<ol>
+<li>辅助构造器的名称为this。（在Java或C++，构造器和类名相同——当你修改类名时就不那么方便了。）</li>
+<li>每一个辅助构造器都必须以一个对先前已定义的其他辅助构造器或主构造器的调用开始。</li>
+</ol>
+<p>这里有一个带有两个辅助构造器的类。</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> name = <span class="string">""</span></div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> age = <span class="number">0</span></div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span></span>(name: <span class="type">String</span>) &#123; <span class="comment">//一个辅助构造器</span></div><div class="line">    <span class="keyword">this</span>() <span class="comment">//调用主构造器</span></div><div class="line">	<span class="keyword">this</span>.name = name</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span></span>(name: <span class="type">String</span>, age: <span class="type">Int</span>) &#123; <span class="comment">//另一个辅助构造器</span></div><div class="line">    <span class="keyword">this</span>(name) <span class="comment">//调用前一个辅助构造器</span></div><div class="line">	<span class="keyword">this</span>.age = age </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>你可以以三种方式构建对象：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">val</span> p1 = <span class="keyword">new</span> <span class="type">Person</span> <span class="comment">//主构造器</span></div><div class="line"><span class="keyword">val</span> p2 = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Fred"</span>) <span class="comment">// 第一个辅助构造器</span></div><div class="line"><span class="keyword">val</span> p3 = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Fred"</span>, <span class="number">42</span>) <span class="comment">//第二个辅助构造器</span></div></pre></td></tr></table></figure>
+<h3 id="5-7-主构造器"><a href="#5-7-主构造器" class="headerlink" title="5.7 主构造器"></a>5.7 主构造器</h3><p>主构造器并不以this方法定义，而是与类定义交织在一起。</p>
+<ol>
+<li>主构造器的参数直接放置在类名之后。</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">val name: <span class="type">String</span>, val age: <span class="type">Int</span></span>) </span>&#123;</div><div class="line">  <span class="comment">// (...)中的内容就是主构造器的参数</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>主构造器的参数被编译成字段，其值被初始化成构造时传入的参数。在本例中，name和age称为Person类的字段。如new Person(“Fred”, 42)这样的构造器调用将设置name和age字段。</p>
+<p>我们只用半行Scala完成了七行Java代码的工作：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123; <span class="comment">//这是Java</span></div><div class="line">  <span class="keyword">private</span> <span class="type">String</span> name;</div><div class="line">  <span class="keyword">private</span> int age;</div><div class="line">  public <span class="type">Person</span>(<span class="type">String</span> name, int age) &#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">	<span class="keyword">this</span>.age = age;</div><div class="line">  &#125;</div><div class="line">  public <span class="type">String</span> name() &#123; <span class="keyword">return</span> <span class="keyword">this</span>.name; &#125;</div><div class="line">  public int age() &#123; <span class="keyword">return</span> <span class="keyword">this</span>.age; &#125;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>主构造器会执行类定义中的所有语句。</li>
+</ol>
+<h3 id="5-8-嵌套类"><a href="#5-8-嵌套类" class="headerlink" title="5.8 嵌套类"></a>5.8 嵌套类</h3><p><strong><strong>未完待续。。。。。。。。。。</strong></strong></p>
+
+		<div style="text-align:center;color: #ccc;font-size:17px;">
+		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
+	</div>  
+  
+    
+    <footer class="entry-meta entry-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Wepay.png',
+  alipayImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Alipay.png'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTcwNS84MjY5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+	  <hr class="entry-footer-hr">
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/07/Hexo-Github-Windows搭建博客（终结版）/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo+Github+Windows搭建博客（终结版）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、相关介绍"><span class="nav-number">2.</span> <span class="nav-text">二、相关介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基础"><span class="nav-number">2.1.</span> <span class="nav-text">1.基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-声明变量"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 声明变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Scala-Doc"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 Scala Doc</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-控制结构和函数"><span class="nav-number">2.2.</span> <span class="nav-text">2.控制结构和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-条件表达式"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 条件表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-循环"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-函数"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-映射与元祖"><span class="nav-number">2.3.</span> <span class="nav-text">4.映射与元祖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-映射"><span class="nav-number">2.3.1.</span> <span class="nav-text">4.1 映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-取映射中的值"><span class="nav-number">2.3.2.</span> <span class="nav-text">4.2 取映射中的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-更新映射中的值"><span class="nav-number">2.3.3.</span> <span class="nav-text">4.3 更新映射中的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-已排序映射"><span class="nav-number">2.3.4.</span> <span class="nav-text">4.4 已排序映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-元组"><span class="nav-number">2.3.5.</span> <span class="nav-text">4.5 元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-拉链操作"><span class="nav-number">2.3.6.</span> <span class="nav-text">4.6 拉链操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-类"><span class="nav-number">2.4.</span> <span class="nav-text">5.类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-简单类和无参方法"><span class="nav-number">2.4.1.</span> <span class="nav-text">5.1 简单类和无参方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-带getter和setter的属性"><span class="nav-number">2.4.2.</span> <span class="nav-text">5.2 带getter和setter的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-只带getter的属性"><span class="nav-number">2.4.3.</span> <span class="nav-text">5.3 只带getter的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-对象私有字段"><span class="nav-number">2.4.4.</span> <span class="nav-text">5.4 对象私有字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-Bean属性"><span class="nav-number">2.4.5.</span> <span class="nav-text">5.5 Bean属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-辅助构造器"><span class="nav-number">2.4.6.</span> <span class="nav-text">5.6 辅助构造器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-7-主构造器"><span class="nav-number">2.4.7.</span> <span class="nav-text">5.7 主构造器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-8-嵌套类"><span class="nav-number">2.4.8.</span> <span class="nav-text">5.8 嵌套类</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2017 Programming prodigal All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/mybooks" class="mobile-nav-link">Books</a>
+  
+    <a href="/favorites" class="mobile-nav-link">Favorites</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Programming prodigal
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 Yiutto All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
