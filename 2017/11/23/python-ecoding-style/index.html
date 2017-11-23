@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python ecoding style | Programming prodigal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="pythonpep8" />
+  
+  
+  
+  
+  <meta name="description" content="Python 的代码风格由 PEP 8 描述。这个文档描述了 Python 编程风格的方方面面。在遵守这个文档的条件下，不同程序员编写的 Python 代码可以保持最大程度的相似风格。这样就易于阅读，易于在程序员之间交流。">
+<meta name="keywords" content="python,pep8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python ecoding style">
+<meta property="og:url" content="http://github.com/2017/11/23/python-ecoding-style/index.html">
+<meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="Python 的代码风格由 PEP 8 描述。这个文档描述了 Python 编程风格的方方面面。在遵守这个文档的条件下，不同程序员编写的 Python 代码可以保持最大程度的相似风格。这样就易于阅读，易于在程序员之间交流。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://github.com/gallery/python.png">
+<meta property="og:updated_time" content="2017-11-23T06:49:53.456Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python ecoding style">
+<meta name="twitter:description" content="Python 的代码风格由 PEP 8 描述。这个文档描述了 Python 编程风格的方方面面。在遵守这个文档的条件下，不同程序员编写的 Python 代码可以保持最大程度的相似风格。这样就易于阅读，易于在程序员之间交流。">
+<meta name="twitter:image" content="http://github.com/gallery/python.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/logo.png">
+  <link rel="apple-touch-icon" href="/css/images/logo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 border-width: 0px;  margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="176px" height="78px" alt="Hike News" src="/css/images/logo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/mybooks">books</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/favorites">favorites</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-python-ecoding-style" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/gallery/python.png" rel="gallery_cjac4dvgm000go4qqhp8geoct">
+        <img src="/gallery/python.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      python ecoding style
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+	  <table style="margin:0 auto;">
+		<tr>
+		  <td>
+	<a href="/2017/11/23/python-ecoding-style/" class="article-date">
+	  <time datetime="2017-11-23T03:40:48.000Z" itemprop="datePublished">2017-11-23</time>
+	</a>
+</td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pep8/">pep8</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+</td>
+		  <td>
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+</td>
+		</tr>
+	  </table>
+    </div>  
+  
+	<div class="article-entry" itemprop="articleBody">
+        <p>Python 的代码风格由 PEP 8 描述。这个文档描述了 Python 编程风格的方方面面。在遵守这个文档的条件下，不同程序员编写的 Python 代码可以保持最大程度的相似风格。这样就易于阅读，易于在程序员之间交流。</p>
+<a id="more"></a>
+<h1 id="1-变量"><a href="#1-变量" class="headerlink" title="1.变量"></a>1.变量</h1><p><strong>常量：</strong> 大写加下划线<br><code>USER_CONSTANT</code><br>对于不会发生改变的全局变量，使用大写加下划线。</p>
+<p><strong>私有变量：</strong> 小写和一个前导下划线<br><code>_private_value</code><br>Python中不存在私有变量一说，若是遇到需要保护的变量，使用小写和一个前导下划线。但这只是程序员之间的一个约定，用于警告说明这是一个私有变量，外部类不要去访问它。但实际上，外部类还是可以访问到这个变量。</p>
+<p><strong>内置变量：</strong> 小写，两个前导下划线和两个后置下划线<br><code>__class__</code><br>两个前导下划线会导致变量在解释期间被更名。这是为了避免内置变量和其他变量产生冲突。用户定义的变量要严格避免这种风格。以免导致混乱。</p>
+<h1 id="2-函数和方法"><a href="#2-函数和方法" class="headerlink" title="2.函数和方法"></a>2.函数和方法</h1><p>总体而言应该使用，小写和下划线。但有些比较老的库使用的是混合大小写，即首单词小写，之后每个单词第一个字母大写，其余小写。但现在，小写和下划线已成为规范。</p>
+<p><strong>私有方法：</strong> 小写和一个前导下划线<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_secrete</span><span class="params">(self)</span>:</span></div><div class="line">  print(<span class="string">"don't test me."</span>)</div></pre></td></tr></table></figure></p>
+<p>这里和私有变量一样，并不是真正的私有访问权限。同时也应该注意一般函数不要使用两个前导下划线(当遇到两个前导下划线时，Python 的名称改编特性将发挥作用)。特殊函数后面会提及。</p>
+<p><strong>特殊方法：</strong> 小写和两个前导下划线，两个后置下划线<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></div><div class="line">  <span class="keyword">return</span> int.__add__(other)</div></pre></td></tr></table></figure></p>
+<p>这种风格只应用于特殊函数，比如操作符重载等。</p>
+<p><strong>函数参数：</strong> 小写和下划线，缺省值等号两边无空格<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, user=None)</span>:</span></div><div class="line">  self._user = user</div></pre></td></tr></table></figure></p>
+<h1 id="3-类"><a href="#3-类" class="headerlink" title="3.类"></a>3.类</h1><p>类总是使用驼峰格式命名，即所有单词首字母大写其余字母小写。类名应该简明，精确，并足以从中理解类所完成的工作。常见的一个方法是使用表示其类型或者特性的后缀，例如:<br><code>SQLEngine</code><br><code>MineTypes</code></p>
+<p>对于<em>基类</em>而言，可以使用一个 Base 或者 Abstract 前缀<br><code>BaseCookie</code><br><code>Abstract</code><br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span><span class="params">(object)</span>:</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, profile)</span>:</span></div><div class="line">    <span class="keyword">return</span> self._profile = profile</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">profile</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="keyword">return</span> self._profile</div></pre></td></tr></table></figure></p>
+<h1 id="4-模块和包"><a href="#4-模块和包" class="headerlink" title="4.模块和包"></a>4.模块和包</h1><p>除特殊模块 <strong>init</strong> 之外，模块名称都使用不带下划线的小写字母。<br>若是它们实现一个协议，那么通常使用lib为后缀，例如:<br><code>import smtplib</code><br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> sys</div></pre></td></tr></table></figure></p>
+<h1 id="5-关于参数"><a href="#5-关于参数" class="headerlink" title="5.关于参数"></a>5.关于参数</h1><h2 id="5-1-不要用断言来实现静态类型检测"><a href="#5-1-不要用断言来实现静态类型检测" class="headerlink" title="5.1 不要用断言来实现静态类型检测"></a>5.1 不要用断言来实现静态类型检测</h2><p>断言可以用于检查参数，但不应仅仅是进行静态类型检测。 Python 是动态类型语言，静态类型检测违背了其设计思想。断言应该用于避免函数不被毫无意义的调用。</p>
+<h2 id="5-2-不要滥用-args和-kwargs"><a href="#5-2-不要滥用-args和-kwargs" class="headerlink" title="5.2 不要滥用 *args和 **kwargs"></a>5.2 不要滥用 <code>*args</code>和 <code>**kwargs</code></h2><p><code>*args</code> 和 <code>**kwargs</code> 参数可能会破坏函数的健壮性。它们使签名变得模糊，而且代码常常开始在不应该的地方构建小的参数解析器。</p>
+<h1 id="6-其他"><a href="#6-其他" class="headerlink" title="6 其他"></a>6 其他</h1><h2 id="6-1-使用-has-或-is-前缀命名布尔元素"><a href="#6-1-使用-has-或-is-前缀命名布尔元素" class="headerlink" title="6.1 使用 has 或 is 前缀命名布尔元素"></a>6.1 使用 has 或 is 前缀命名布尔元素</h2><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">is_connect = <span class="keyword">True</span></div><div class="line">has_member = <span class="keyword">False</span></div></pre></td></tr></table></figure>
+<h2 id="6-2-用复数形式命名序列"><a href="#6-2-用复数形式命名序列" class="headerlink" title="6.2 用复数形式命名序列"></a>6.2 用复数形式命名序列</h2><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">members = [<span class="string">'user_1'</span>, <span class="string">'user_2'</span>]</div></pre></td></tr></table></figure>
+<h2 id="6-3-用显式名称命名字典"><a href="#6-3-用显式名称命名字典" class="headerlink" title="6.3 用显式名称命名字典"></a>6.3 用显式名称命名字典</h2><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">person_address = &#123;<span class="string">'user_1'</span>:<span class="string">'10 road WD'</span>, <span class="string">'user_2'</span> : <span class="string">'20 street huafu'</span>&#125;</div></pre></td></tr></table></figure>
+<h2 id="6-4-避免通用名称"><a href="#6-4-避免通用名称" class="headerlink" title="6.4 避免通用名称"></a>6.4 避免通用名称</h2><p>诸如 list, dict, sequence 或者 element 这样的名称应该避免。</p>
+<h2 id="6-5-避免现有名称"><a href="#6-5-避免现有名称" class="headerlink" title="6.5 避免现有名称"></a>6.5 避免现有名称</h2><p>诸如 os, sys 这种系统已经存在的名称应该避免。</p>
+<h1 id="7-一些数字"><a href="#7-一些数字" class="headerlink" title="7.一些数字"></a>7.一些数字</h1><p><strong>一行列数:</strong> PEP 8 规定为 79 列，这有些苛刻了。根据自己的情况，比如不要超过满屏时编辑器的显示列数。这样就可以在不动水平游标的情况下，方便的查看代码。</p>
+<p><strong>一个函数:</strong> 不要超过 30 行代码, 即可显示在一个屏幕类，可以不使用垂直游标即可看到整个函数。</p>
+<p><strong>一个类:</strong>不要超过 200 行代码，不要有超过 10 个方法。</p>
+<p><strong>一个模块:</strong>不要超过 500 行。</p>
+<h1 id="8-验证脚本"><a href="#8-验证脚本" class="headerlink" title="8.验证脚本"></a>8.验证脚本</h1><p>可以安装一个 pep8 脚本用于验证你的代码风格是否符合 PEP8。</p>
+<p><code>&gt;&gt;easy_install pep8</code><br><code>&gt;&gt;pep8 -r --ignoire E501 Test.py</code></p>
+<p>这个命令行的意思是，重复打出错误，并且忽略 501 错误(代码超过 79 行)。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">PEP 8 – Style Guide for Python Code</a><br><a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/" target="_blank" rel="external">Google 开源项目Python风格指南</a></p>
+
+		<div style="text-align:center;color: #ccc;font-size:17px;">
+		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
+	</div>  
+  
+    
+    <footer class="entry-meta entry-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Wepay.png',
+  alipayImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Alipay.png'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTcwNS84MjY5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+	  <hr class="entry-footer-hr">
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/18/Scala-Studying/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Spark之Scala Studying</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-变量"><span class="nav-number">1.</span> <span class="nav-text">1.变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-函数和方法"><span class="nav-number">2.</span> <span class="nav-text">2.函数和方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-类"><span class="nav-number">3.</span> <span class="nav-text">3.类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-模块和包"><span class="nav-number">4.</span> <span class="nav-text">4.模块和包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-关于参数"><span class="nav-number">5.</span> <span class="nav-text">5.关于参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-不要用断言来实现静态类型检测"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 不要用断言来实现静态类型检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-不要滥用-args和-kwargs"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 不要滥用 *args和 **kwargs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-其他"><span class="nav-number">6.</span> <span class="nav-text">6 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-使用-has-或-is-前缀命名布尔元素"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 使用 has 或 is 前缀命名布尔元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-用复数形式命名序列"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 用复数形式命名序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-用显式名称命名字典"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 用显式名称命名字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-避免通用名称"><span class="nav-number">6.4.</span> <span class="nav-text">6.4 避免通用名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-避免现有名称"><span class="nav-number">6.5.</span> <span class="nav-text">6.5 避免现有名称</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-一些数字"><span class="nav-number">7.</span> <span class="nav-text">7.一些数字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-验证脚本"><span class="nav-number">8.</span> <span class="nav-text">8.验证脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">9.</span> <span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2017 Programming prodigal All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/mybooks" class="mobile-nav-link">Books</a>
+  
+    <a href="/favorites" class="mobile-nav-link">Favorites</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Programming prodigal
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 Yiutto All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
