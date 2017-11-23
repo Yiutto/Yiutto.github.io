@@ -35,7 +35,7 @@ home_background_image:
   enable: true
   mode: image
   rolling: true
-  url: [css/images/midYS.gif, css/images/yasuo1.jpg, css/images/yasuo2.jpg, https://source.unsplash.com/collection/954550/1920x1080]
+  url: [css/images/bclz.jpg, css/images/lxh.jpg, css/images/yasuo2.jpg, https://source.unsplash.com/collection/954550/1920x1080]
 
 home_logo_image:
   enable: false
