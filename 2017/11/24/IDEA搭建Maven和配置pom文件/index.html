@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>idea搭建maven和配置pom文件 | Programming prodigal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="IDEAscalamaven" />
+  
+  
+  
+  
+  <meta name="description" content="前面介绍了如何利用IntelliJ-IDEA与Maven学习Scala编程，今天来介绍一下Maven的搭建，pom.xml文件的认识。">
+<meta name="keywords" content="IDEA,scala,maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA搭建Maven和配置pom文件">
+<meta property="og:url" content="http://github.com/2017/11/24/IDEA搭建Maven和配置pom文件/index.html">
+<meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="前面介绍了如何利用IntelliJ-IDEA与Maven学习Scala编程，今天来介绍一下Maven的搭建，pom.xml文件的认识。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://github.com/gallery/idea.jpg">
+<meta property="og:updated_time" content="2017-11-24T07:48:24.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IDEA搭建Maven和配置pom文件">
+<meta name="twitter:description" content="前面介绍了如何利用IntelliJ-IDEA与Maven学习Scala编程，今天来介绍一下Maven的搭建，pom.xml文件的认识。">
+<meta name="twitter:image" content="http://github.com/gallery/idea.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/logo.png">
+  <link rel="apple-touch-icon" href="/css/images/logo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 border-width: 0px;  margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="176px" height="78px" alt="Hike News" src="/css/images/logo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/mybooks">books</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/favorites">favorites</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-IDEA搭建Maven和配置pom文件" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/gallery/idea.jpg" rel="gallery_cjadnsguz000a0wqq8j5eahhg">
+        <img src="/gallery/idea.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      IDEA搭建Maven和配置pom文件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+	  <table style="margin:0 auto;">
+		<tr>
+		  <td>
+	<a href="/2017/11/24/IDEA搭建Maven和配置pom文件/" class="article-date">
+	  <time datetime="2017-11-24T06:47:03.000Z" itemprop="datePublished">2017-11-24</time>
+	</a>
+</td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IDEA/">IDEA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li></ul>
+</td>
+		  <td>
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+</td>
+		</tr>
+	  </table>
+    </div>  
+  
+	<div class="article-entry" itemprop="articleBody">
+        <p>前面介绍了如何利用IntelliJ-IDEA与Maven学习Scala编程，今天来介绍一下Maven的搭建，pom.xml文件的认识。<br><a id="more"></a></p>
+<h1 id="1-Idea开发环境中搭建Maven"><a href="#1-Idea开发环境中搭建Maven" class="headerlink" title="1.Idea开发环境中搭建Maven"></a>1.Idea开发环境中搭建Maven</h1><p>当配置完Maven之后，我们需要给Idea配置Maven，那么首先必须先要安装Idea，Idea的安装在这里就不累赘了，请看我之前的博文，非常简单，下一步下一步即可，安装完成之后打开Idea设置Maven，单击<code>Setting</code>之后，设置<code>Maven</code>节点下的<code>Maven home directory</code>和<code>user settings file</code>和<code>local repository</code>如图所示：</p>
+<p><img src="/gallery/IntelliJ-IDEA-Maven-Scala/maven1.png" alt="Maven"></p>
+<p>其中<code>user settings file</code>和<code>local repository</code>这2个文件是和pom.xml文件绑在一起的，里面都是工程需要的jar包，一般来说在新建工程时我们考虑到下载了所有的jar，当然你也可以从其他电脑那拷贝过来。</p>
+<h1 id="2-MAVEN自动导入jar包"><a href="#2-MAVEN自动导入jar包" class="headerlink" title="2.MAVEN自动导入jar包"></a>2.MAVEN自动导入jar包</h1><p>这里以spark项目为例，比如我们需要在scala文件导入，eg：<br><figure class="highlight scala"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.mllib.tree.model.<span class="type">GradientBoostedTreesModel</span></div><div class="line"><span class="keyword">import</span> org.apache.spark.rdd.<span class="type">RDD</span></div><div class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;<span class="type">DataFrame</span>, <span class="type">SaveMode</span>, <span class="type">SparkSession</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>我们需要的包有<code>spark.sql</code>和<code>spark.mllib</code>等，一般文件导入包是根据<code>pom.xml</code>配置文件，我们需要在<code>pom.xml</code>写入如下代码</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><div class="line">&lt;!--spark--&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;spark-core_2<span class="number">.11</span>&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;<span class="number">2.0</span><span class="number">.2</span>&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;spark-sql_2<span class="number">.11</span>&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;<span class="number">2.0</span><span class="number">.2</span>&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;spark-streaming_2<span class="number">.11</span>&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;<span class="number">2.0</span><span class="number">.2</span>&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;spark-mllib_2<span class="number">.11</span>&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;<span class="number">2.0</span><span class="number">.2</span>&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>打开<a href="http://mvnrepository.com/" target="_blank" rel="external">Maven Repository</a>,搜索spark，进入如下界面</p>
+<p><img src="/gallery/IntelliJ-IDEA-Maven-Scala/maven2.png" alt="spark"> </p>
+<p>点击<strong> Spark Project ML Library</strong>，进入如下界面，根据选择Scala版本选择自己的版本</p>
+<p><img src="/gallery/IntelliJ-IDEA-Maven-Scala/maven3.png" alt="mllib"></p>
+<p>这里我根据我的Scala包选择,将里面的代码复制到<code>pom.xml</code>，这样，Maven就会开始自动下载jar包到本地仓库，然后关联到你的项目中。如下图</p>
+<p><img src="/gallery/IntelliJ-IDEA-Maven-Scala/maven4.png" alt="mllib"></p>
+<p>下载完成后，查看External Libraries，会不会发现，瞬间导入了好多jar包（当然不是瞬间，这得看你的网速了）呢。</p>
+<p>这就是Maven的强大之处，如果你需要使用spark开发大数据项目的话，只需记住几个重要的包的名字，就可以轻松将所有包导入项目中。</p>
+<h1 id="注意：-maven的local-repository目录问题"><a href="#注意：-maven的local-repository目录问题" class="headerlink" title="注意：**maven的local repository目录问题"></a>注意：**maven的local repository目录问题</h1><p>默认会放在<code>~/.m2/repository</code>目录下 （“~”代表用户的目录，安装Maven后我们会在用户目录下发现<code>.m2</code> 文件夹。默认情况下，该文件夹下放置了Maven本地仓库<code>.m2/repository</code>。所有的Maven构件(artifact)都被存储到该仓库中，以方便重用)。<br><em>有的时候方便，我们通常直接从同事的电脑里面移植repository过来。</em></p>
+
+		<div style="text-align:center;color: #ccc;font-size:17px;">
+		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
+	</div>  
+  
+    
+    <footer class="entry-meta entry-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Wepay.png',
+  alipayImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Alipay.png'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTcwNS84MjY5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+	  <hr class="entry-footer-hr">
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/24/IDEA中使用SVN同步项目/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          IDEA中使用SVN同步项目
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/24/利用IntelliJ-IDEA与Maven学习Scalaa编程/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">利用IntelliJ IDEA与Maven学习Scala编程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Idea开发环境中搭建Maven"><span class="nav-number">1.</span> <span class="nav-text">1.Idea开发环境中搭建Maven</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MAVEN自动导入jar包"><span class="nav-number">2.</span> <span class="nav-text">2.MAVEN自动导入jar包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意：-maven的local-repository目录问题"><span class="nav-number">3.</span> <span class="nav-text">注意：**maven的local repository目录问题</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2017 Programming prodigal All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/mybooks" class="mobile-nav-link">Books</a>
+  
+    <a href="/favorites" class="mobile-nav-link">Favorites</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Programming prodigal
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 Yiutto All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
