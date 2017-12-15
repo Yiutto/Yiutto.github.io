@@ -20,7 +20,7 @@
 <meta property="og:description" content="一、前言这是一篇使用GitHub Pages和Hexo搭建免费独立博客的总结。 作为一个数据挖掘工作者来说，虽说是个码农，但是一开始照着网上的各种教程去搭建的时候，还是云里雾里的。记得几个月前刚接触hexo（哈哈，对参加工作的我确实有点晚，没太多时间去搞），对版本控制一点概念都没有，更别说使用GitHub Page能做出一个好看又好用的博客了。所以第一次的尝试失败了。 后来的两三个月里，开始逐渐地">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://github.com/gallery/hexo-blog.png">
-<meta property="og:updated_time" content="2017-11-20T03:55:04.890Z">
+<meta property="og:updated_time" content="2017-12-14T08:18:55.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo+Github+Windows搭建博客（终结版）">
 <meta name="twitter:description" content="一、前言这是一篇使用GitHub Pages和Hexo搭建免费独立博客的总结。 作为一个数据挖掘工作者来说，虽说是个码农，但是一开始照着网上的各种教程去搭建的时候，还是云里雾里的。记得几个月前刚接触hexo（哈哈，对参加工作的我确实有点晚，没太多时间去搞），对版本控制一点概念都没有，更别说使用GitHub Page能做出一个好看又好用的博客了。所以第一次的尝试失败了。 后来的两三个月里，开始逐渐地">
@@ -174,7 +174,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="/gallery/hexo-blog.png" rel="gallery_cjadqmvpp000238qqbp60or5b">
+      <a class="article-gallery-img fancybox" href="/gallery/hexo-blog.png" rel="gallery_cjb67o4e40002okqq182xdxrp">
         <img src="/gallery/hexo-blog.png" itemprop="image">
       </a>
     
@@ -348,20 +348,20 @@
 <ul>
 <li><strong>添加博客</strong></li>
 </ul>
-<p><code>hexo post new &quot;MyFirstBlog&quot;</code></p>
+<p><code>hexo new post &quot;MyFirstBlog&quot;</code></p>
 <p>这时会在source_posts文件夹下生成一个<em>MyFirstBlog.md</em>，具体设置如下</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">---</div><div class="line">title: MyFirstBlog</div><div class="line">date: 2017-10-31 19:46:41</div><div class="line">categories: Blog</div><div class="line">tags:</div><div class="line">   - git</div><div class="line">   - markdown</div><div class="line">---</div></pre></td></tr></table></figure>
 <p><code>&lt;!--more--&gt;</code>可以添加到博客中，方便前端展示“<em>Read More</em>”</p>
 <ul>
 <li><strong>设置tags</strong></li>
 </ul>
-<p><code>hexo page new &quot;Tags&quot;</code></p>
+<p><code>hexo new page &quot;Tags&quot;</code></p>
 <p>这时会在source\tags文件夹下生成一个<em>index.md</em>，具体如下</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">---</div><div class="line">title: Tags</div><div class="line">date: 2017-08-11 12:12:45</div><div class="line">layout: &quot;tags&quot;</div><div class="line">comments: false</div><div class="line">---</div></pre></td></tr></table></figure>
 <ul>
 <li><strong>设置categories</strong></li>
 </ul>
-<p><code>hexo page new &quot;Categories&quot;</code></p>
+<p><code>hexo new page &quot;Categories&quot;</code></p>
 <p>这时会在source\categories文件夹下生成一个<em>index.md</em>，具体如下</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">---</div><div class="line">title: Categories</div><div class="line">date: 2017-08-16 15:00:44</div><div class="line">layout: &quot;categories&quot;</div><div class="line">comments: false</div><div class="line">---</div></pre></td></tr></table></figure>
 <p>后期需要依次执行<code>hexo clean</code>、<code>hexo g</code>、<code>hexo s</code></p>

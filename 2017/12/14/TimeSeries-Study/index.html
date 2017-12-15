@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>timeseries-study | Programming prodigal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="pythontimeseries" />
+  
+  
+  
+  
+  <meta name="description" content="学习了一段时间序列，总感觉自己没有完全搞太明白，这里附上一些实验代码，方便后期总结回顾。对于时间序列的预测问题，一般的机器学习算法并没有很占优势，RNN类的算法训练成本又太高，往往不可取，倒是传统的时间序列模型的效果较好，这里对此，进行一定的学习。内容来自互联网">
+<meta name="keywords" content="python,timeseries">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TimeSeries-Study">
+<meta property="og:url" content="http://github.com/2017/12/14/TimeSeries-Study/index.html">
+<meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="学习了一段时间序列，总感觉自己没有完全搞太明白，这里附上一些实验代码，方便后期总结回顾。对于时间序列的预测问题，一般的机器学习算法并没有很占优势，RNN类的算法训练成本又太高，往往不可取，倒是传统的时间序列模型的效果较好，这里对此，进行一定的学习。内容来自互联网">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://github.com/gallery/python.png">
+<meta property="og:updated_time" content="2017-12-14T13:16:58.573Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TimeSeries-Study">
+<meta name="twitter:description" content="学习了一段时间序列，总感觉自己没有完全搞太明白，这里附上一些实验代码，方便后期总结回顾。对于时间序列的预测问题，一般的机器学习算法并没有很占优势，RNN类的算法训练成本又太高，往往不可取，倒是传统的时间序列模型的效果较好，这里对此，进行一定的学习。内容来自互联网">
+<meta name="twitter:image" content="http://github.com/gallery/python.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/logo.png">
+  <link rel="apple-touch-icon" href="/css/images/logo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 border-width: 0px;  margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="176px" height="78px" alt="Hike News" src="/css/images/logo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/mybooks">books</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/favorites">favorites</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-TimeSeries-Study" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/gallery/python.png" rel="gallery_cjb67o4ey000rokqqvvstifc6">
+        <img src="/gallery/python.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      TimeSeries-Study
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+	  <table style="margin:0 auto;">
+		<tr>
+		  <td>
+	<a href="/2017/12/14/TimeSeries-Study/" class="article-date">
+	  <time datetime="2017-12-14T08:16:00.000Z" itemprop="datePublished">2017-12-14</time>
+	</a>
+</td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/timeseries/">timeseries</a></li></ul>
+</td>
+		  <td>
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+</td>
+		</tr>
+	  </table>
+    </div>  
+  
+	<div class="article-entry" itemprop="articleBody">
+        <p>学习了一段时间序列，总感觉自己没有完全搞太明白，这里附上一些实验代码，方便后期总结回顾。对于时间序列的预测问题，一般的机器学习算法并没有很占优势，RNN类的算法训练成本又太高，往往不可取，倒是传统的时间序列模型的效果较好，这里对此，进行一定的学习。内容来自互联网<br><a id="more"></a></p>
+<h1 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h1><p>顾名思义，时间序列是时间间隔不变的情况下收集的时间点集合。这些集合被分析用来了解长期发展趋势，为了预测未来或者表现分析的其他形式。但是是什么令时间序列与常见的回归问题的不同？</p>
+<p>有两个<em>原因</em>：</p>
+<p>1、时间序列是跟时间有关的。所以基于线性回归模型的假设：观察结果是独立的，在这种情况下是不成立的。</p>
+<p>2、随着上升或者下降的趋势，更多的时间序列出现季节性趋势的形式，如：特定时间框架的具体变化。即：如果你看到羊毛夹克的销售上升，你就一定会在冬季做更多销售。</p>
+<p>常用的时间序列模型有AR模型、MA模型、ARMA模型和ARIMA模型等。</p>
+<h2 id="1-1-时间序列的预处理"><a href="#1-1-时间序列的预处理" class="headerlink" title="1.1 时间序列的预处理"></a>1.1 时间序列的预处理</h2><p>拿到一个观察值序列之后，首先要对它的平稳性和纯随机性进行检验，这两个重要的检验称为序列的预处理。根据检验的结果可以将序列分为不同的类型，对不同类型的序列我们会采用不同的分析方法。</p>
+<p>先说下什么是平稳，<strong>平稳</strong>就是围绕着一个常数上下波动且波动范围有限，即有<em>常数均值</em> 和<em>常数方差</em>。如果有明显的趋势或周期性，那它通常不是平稳序列。序列平稳不平稳，一般采用三种方法检验：</p>
+<p>（1）时序图检验<br><img src="/gallery/timeseries/timeseries1.png" alt="TimeSeries"><br>看看上面这个图，很明显的增长趋势，不平稳。</p>
+<p>（2）自相关系数和偏相关系数</p>
+<p>还以上面的序列为例：用SPSS得到自相关和偏相关图。<br><img src="/gallery/timeseries/timeseries2.png" alt="原始序列Autocorrelation and Partial Correlation"></p>
+<p>分析：左边第一个为自相关图（Autocorrelation），第二个偏相关图(Partial Correlation)。</p>
+<p>平稳的序列的自相关图和偏相关图要么拖尾，要么是截尾。<strong>截尾</strong>就是在某阶之后，系数都为 0 ，怎么理解呢，看上面偏相关的图，当阶数为 1 的时候，系数值还是很大，0.914；二阶长的时候突然就变成了 0.050。后面的值都很小，认为是趋于 0 ，这种状况就是截尾。什么是拖尾，<strong>拖尾</strong>就是有一个缓慢衰减的趋势，但是不都为 0 。</p>
+<p>自相关图既不是拖尾也不是截尾。以上的图的自相关是一个三角对称的形式，这种趋势是单调趋势的典型图形，说明这个序列不是平稳序列。</p>
+<p>（3）单位根检验</p>
+<p>单位根检验是指检验序列中是否存在单位根，如果存在单位根就是非平稳时间序列。</p>
+<h2 id="1-2-不平稳，怎么办？"><a href="#1-2-不平稳，怎么办？" class="headerlink" title="1.2 不平稳，怎么办？"></a>1.2 不平稳，怎么办？</h2><p>答案是差分，转换为平稳序列。什么是差分？一阶差分指原序列值相距一期的两个序列值之间的减法运算；k阶差分就是相距k期的两个序列值之间相减。如果一个时间序列经过差分运算后具有平稳性，则该序列为差分平稳序列，可以使用ARIMA模型进行分析。</p>
+<p>还是上面那个序列，两种方法都证明他是不靠谱的，不平稳的。确定不平稳后，依次进行1阶、2阶、3阶…差分，直到平稳为止。先来个一阶差分，上图:</p>
+<p><img src="/gallery/timeseries/timeseries3.png" alt="1阶差分TimeSeries"></p>
+<p>从图上看，一阶差分的效果不错，看着是平稳的。</p>
+<p><strong>平稳性检验过后，下一步是纯随机性检验。</strong></p>
+<p>对于纯随机序列，又称白噪声序列，序列的各项数值之间没有任何相关关系，序列在进行完全无序的随机波动，<strong>可以终止对该序列的分析</strong>。白噪声序列是没有信息可提取的平稳序列。</p>
+<p>对于平稳非白噪声序列，它的均值和方差是常数。通常是建立一个线性模型来拟合该序列的发展，借此提取该序列的有用信息。ARMA模型是最常用的平稳序列拟合模型。</p>
+<hr>
+<blockquote>
+<p>1.什么是白噪声？<br>答：白噪声是指功率谱密度在整个频域内均匀分布的噪声。白噪声或白杂讯，是一种功率频谱密度为常数的随机信号或随机过程。换句话说，此信号在各个频段上的功率是一样的，由于白光是由各种频率（颜色）的单色光混合而成，因而此信号的这种具有平坦功率谱的性质被称作是“白色的”，此信号也因此被称作白噪声。相对的，其他不具有这一性质的噪声信号被称为有色噪声。理想的白噪声具有无限带宽，因而其能量是无限大，这在现实世界是不可能存在的。实际上，我们常常将有限带宽的平整讯号视为白噪音，因为这让我们在数学分析上更加方便。然而，白噪声在数学处理上比较方便，因此它是系统分析的有力工具。一般，只要一个噪声过程所具有的频谱宽度远远大于它所作用系统的带宽，并且在该带宽中其频谱密度基本上可以作为常数来考虑，就可以把它作为白噪声来处理。例如，热噪声和散弹噪声在很宽的频率范围内具有均匀的功率谱密度，通常可以认为它们是白噪声。高斯白噪声：如果一个噪声，它的幅度分布服从高斯分布，而它的功率谱密度又是均匀分布的，则称它为高斯白噪声。热噪声和散粒噪声是高斯白噪声。所谓高斯白噪声中的高斯是指概率分布是正态函数，而白噪声是指它的二阶矩不相关，一阶矩为常数，是指先后信号在时间上的相关性。<br>       高斯白噪声的概念——“白”指功率谱恒定;高斯指幅度取各种值时的概率p (x)是高斯函数<br>       高斯噪声——n维分布都服从高斯分布的噪声<br>       高斯分布——也称正态分布，又称常态分布。对于随机变量X，记为N（μ，σ2），分别为高斯分布的期望和方差。当有确定值时，p (x)也就确定了，特别当μ=0，σ2=1时，X的分布为标准正态分布。 </p>
+<p>2.为什么残差要是白噪声？<br>答：得到白噪声序列，就说明时间序列中有用的信息已经被提取完毕了，剩下的全是随机扰动，是无法预测和使用的，残差序列如果通过了白噪声检验，则建模就可以终止了，因为没有信息可以继续提取。如果残差不是白噪声，就说明残差中还有有用的信息，需要修改模型或者进一步提取。</p>
+<p>3.怎样对白噪声进行检验？<br>答：白噪声检验的步骤为：打开resid序列，view，correlogram，差分阶数选择level，确定，看q统计量的伴随p值是不是很大就行了。</p>
+</blockquote>
+<hr>
+<h2 id="1-3-平稳时间序列建模"><a href="#1-3-平稳时间序列建模" class="headerlink" title="1.3 平稳时间序列建模"></a>1.3 平稳时间序列建模</h2><p>某个时间序列经过预处理，被判定为平稳非白噪声序列，就可以进行时间序列建模。</p>
+<p><strong>建模步骤：</strong></p>
+<p>（1）计算出该序列的自相关系数（ACF）和偏相关系数（PACF）；</p>
+<p>（2）模型识别，也称模型定阶。根据系数情况从AR(p)模型、MA(q)模型、ARMA(p，q)模型、ARIMA（p，d，q）模型中选择合适模型，其中p为自回归项，d为差分阶数，q为移动平均项数。</p>
+<p>下面是平稳序列的模型选择：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">自相关系数（ACF）</th>
+<th style="text-align:center">偏相关系数（PACF）</th>
+<th style="text-align:center">选择模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">拖尾</td>
+<td style="text-align:center">p阶截尾</td>
+<td style="text-align:center">AR(p)</td>
+</tr>
+<tr>
+<td style="text-align:center">q阶截尾</td>
+<td style="text-align:center">拖尾</td>
+<td style="text-align:center">MA(q)</td>
+</tr>
+<tr>
+<td style="text-align:center">p阶拖尾</td>
+<td style="text-align:center">q阶拖尾</td>
+<td style="text-align:center">ARMA(p，q)</td>
+</tr>
+</tbody>
+</table>
+<p>ARIMA 是 ARMA 算法的扩展版，用法类似 。</p>
+<p>（3）估计模型中的未知参数的值并对参数进行检验；</p>
+<p>（4）模型检验；</p>
+<p>（5）模型优化；</p>
+<p>（6）模型应用：进行短期预测。</p>
+<h2 id="1-4-python实例操作"><a href="#1-4-python实例操作" class="headerlink" title="1.4 python实例操作"></a>1.4 python实例操作</h2><p>以下为某店铺2015/1/1~2015/2/6的销售数据,以此建模预测2015/2/7~2015/2/11的销售数据。<br><img src="/gallery/timeseries/timeseries4.png" alt="TimeSeries"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#-*- coding: utf-8 -*-</span></div><div class="line"><span class="comment">#arima时序模型</span></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"></div><div class="line"><span class="comment">#参数初始化</span></div><div class="line">discfile = <span class="string">'E:/destop/text/arima_data.xls'</span></div><div class="line">forecastnum = <span class="number">5</span></div><div class="line"></div><div class="line"><span class="comment">#读取数据，指定日期列为指标，Pandas自动将“日期”列识别为Datetime格式</span></div><div class="line">data = pd.read_excel(discfile, index_col = <span class="string">u'日期'</span>)</div><div class="line"></div><div class="line"><span class="comment">#时序图</span></div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line"><span class="comment">#用来正常显示中文标签</span></div><div class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>] </div><div class="line"></div><div class="line"><span class="comment">#用来正常显示负号</span></div><div class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="keyword">False</span> </div><div class="line">data.plot()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries5.png" alt="TimeSeries"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#自相关图</span></div><div class="line"><span class="keyword">from</span> statsmodels.graphics.tsaplots <span class="keyword">import</span> plot_acf</div><div class="line">plot_acf(data).show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries6.png" alt="Autocorrelation"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#平稳性检测</span></div><div class="line"><span class="keyword">from</span> statsmodels.tsa.stattools <span class="keyword">import</span> adfuller <span class="keyword">as</span> ADF</div><div class="line">print(<span class="string">u'原始序列的ADF检验结果为：'</span>, ADF(data[<span class="string">u'销量'</span>]))</div></pre></td></tr></table></figure>
+<p>返回值依次为adf、pvalue、usedlag、nobs、critical values、icbest、regresults、resstore</p>
+<p><img src="/gallery/timeseries/ts1.jpg" alt="adf检验"></p>
+<p>adf值大于三个水平值，p值显著大于<strong>0.05</strong>，该序列为<strong>非平稳序列</strong>。</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#差分后的结果</span></div><div class="line">D_data = data.diff().dropna()</div><div class="line">D_data.columns = [<span class="string">u'销量差分'</span>]</div><div class="line"></div><div class="line"><span class="comment">#时序图</span></div><div class="line">D_data.plot() </div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries7.png" alt="一阶差分TimeSeries"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#自相关图</span></div><div class="line">plot_acf(D_data).show()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries8.png" alt="一阶差分Autocorrelation"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> statsmodels.graphics.tsaplots <span class="keyword">import</span> plot_pacf</div><div class="line"></div><div class="line"><span class="comment">#偏自相关图</span></div><div class="line">plot_pacf(D_data).show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries9.png" alt="一阶差分Partial Autocorrelation"></p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#平稳性检测</span></div><div class="line">print(<span class="string">u'差分序列的ADF检验结果为：'</span>, ADF(D_data[<span class="string">u'销量差分'</span>]))</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/ts3.jpg" alt="一阶差分adf检验"></p>
+<p>adf值小于两个水平值，p值显著小于<strong>0.05</strong>，一阶差分后序列为<strong>平稳序列</strong>。</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#白噪声检验</span></div><div class="line"><span class="keyword">from</span> statsmodels.stats.diagnostic <span class="keyword">import</span> acorr_ljungbox</div><div class="line"></div><div class="line"><span class="comment">#返回统计量和p值</span></div><div class="line">print(<span class="string">u'差分序列的白噪声检验结果为：'</span>, acorr_ljungbox(D_data, lags=<span class="number">1</span>))</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/ts4.jpg" alt="一阶差分白噪声检验"></p>
+<p>P值小于<strong>0.05</strong>，所以一阶差分后的序列为<strong>平稳非白噪声序列</strong>。</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> statsmodels.tsa.arima_model <span class="keyword">import</span> ARIMA</div><div class="line"><span class="comment">#定阶</span></div><div class="line"><span class="comment">#一般阶数不超过length/10</span></div><div class="line">pmax = int(len(D_data)/<span class="number">10</span>) </div><div class="line"><span class="comment">#一般阶数不超过length/10</span></div><div class="line">qmax = int(len(D_data)/<span class="number">10</span>) </div><div class="line"></div><div class="line"><span class="comment">#bic矩阵</span></div><div class="line">bic_matrix = [] </div><div class="line"><span class="keyword">for</span> p <span class="keyword">in</span> range(pmax+<span class="number">1</span>):</div><div class="line">  tmp = []</div><div class="line">  <span class="keyword">for</span> q <span class="keyword">in</span> range(qmax+<span class="number">1</span>):</div><div class="line">   <span class="comment">#存在部分报错，所以用try来跳过报错。</span></div><div class="line">    <span class="keyword">try</span>: </div><div class="line">      tmp.append(ARIMA(data, (p,<span class="number">1</span>,q)).fit().bic)</div><div class="line">    <span class="keyword">except</span>:</div><div class="line">      tmp.append(<span class="keyword">None</span>)</div><div class="line">   bic_matrix.append(tmp)</div><div class="line"><span class="comment">#从中可以找出最小值</span></div><div class="line">bic_matrix = pd.DataFrame(bic_matrix) </div><div class="line"></div><div class="line"><span class="comment">#先用stack展平，然后用idxmin找出最小值位置。</span></div><div class="line">p,q = bic_matrix.stack().idxmin() </div><div class="line">print(<span class="string">u'BIC最小的p值和q值为：%s、%s'</span> %(p,q))</div></pre></td></tr></table></figure>
+<p>取<strong>BIC信息量达到最小</strong>的模型阶数，结果p为0，q为1，定阶完成。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#建立ARIMA(0, 1, 1)模型</span></div><div class="line">model = ARIMA(data, (p,<span class="number">1</span>,q)).fit() </div><div class="line"></div><div class="line"><span class="comment">#给出一份模型报告</span></div><div class="line">model.summary2() </div><div class="line"></div><div class="line"><span class="comment">#作为期5天的预测，返回预测结果、标准误差、置信区间。</span></div><div class="line">model.forecast(<span class="number">5</span>)</div></pre></td></tr></table></figure>
+<p>最终模型预测值如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">2015/2/7</th>
+<th style="text-align:center">2015/2/8</th>
+<th style="text-align:center">2015/2/9</th>
+<th style="text-align:center">2015/2/10</th>
+<th style="text-align:center">2015/2/11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">4874.0</td>
+<td style="text-align:center">4923.9</td>
+<td style="text-align:center">4973.9</td>
+<td style="text-align:center">5023.8</td>
+<td style="text-align:center">5073.8</td>
+</tr>
+</tbody>
+</table>
+<p>利用模型向前预测的时间越长，预测的误差将会越大，这是时间预测的典型特点。</p>
+<p>参数检验如下：<br><img src="/gallery/timeseries/ts5.jpg" alt="ARIMA参数检验"></p>
+<h1 id="2-TimeSeries"><a href="#2-TimeSeries" class="headerlink" title="2.TimeSeries"></a>2.TimeSeries</h1><h2 id="2-1-什么是时间序列"><a href="#2-1-什么是时间序列" class="headerlink" title="2.1 什么是时间序列"></a>2.1 什么是时间序列</h2><p>时间序列简单的说就是各时间点上形成的数值序列，时间序列分析就是通过观察历史数据预测未来的值。在这里需要强调一点的是，时间序列分析并不是关于时间的回归，它主要是研究自身的变化规律的（这里不考虑含外生变量的时间序列）。</p>
+<h2 id="2-2-为什么用python"><a href="#2-2-为什么用python" class="headerlink" title="2.2 为什么用python"></a>2.2 为什么用python</h2><p>用两个字总结“情怀”，爱屋及乌，个人比较喜欢python，就用python撸了。能做时间序列的软件很多，SAS、R、SPSS、Eviews甚至matlab等等，实际工作中应用得比较多的应该还是SAS和R，前者推荐王燕写的《应用时间序列分析》，后者推荐<a href="https://www.analyticsvidhya.com/blog/2015/12/complete-tutorial-time-series-modeling/" target="_blank" rel="external">基于R语言的时间序列建模完整教程</a>这篇博文（翻译版）。python作为科学计算的利器，当然也有相关分析的包:statsmodels中tsa模块，当然这个包和SAS、R是比不了，但是python有另一个神器：pandas！pandas在时间序列上的应用，能简化我们很多的工作。</p>
+<h2 id="2-3-时间序列分析"><a href="#2-3-时间序列分析" class="headerlink" title="2.3 时间序列分析"></a>2.3 时间序列分析</h2><h3 id="2-3-1-基本模型"><a href="#2-3-1-基本模型" class="headerlink" title="2.3.1 基本模型"></a>2.3.1 基本模型</h3><p>自回归移动平均模型(ARMA(p，q))是时间序列中最为重要的模型之一，它主要由两部分组成： AR代表p阶自回归过程，MA代表q阶移动平均过程，其公式如下：<br><img src="/gallery/timeseries/gs1.png" alt="公式1"><br><img src="/gallery/timeseries/gs2.png" alt="公式2"></p>
+<p>依据模型的形式、特性及自相关和偏自相关函数的特征，总结如下：<br><img src="/gallery/timeseries/gs3.png" alt="相关函数"></p>
+<p>在时间序列中，ARIMA模型是在ARMA模型的基础上多了差分的操作。</p>
+<h3 id="2-3-2-pandas时间序列操作"><a href="#2-3-2-pandas时间序列操作" class="headerlink" title="2.3.2 pandas时间序列操作"></a>2.3.2 pandas时间序列操作</h3><p>大熊猫真的很可爱，这里简单介绍一下它在时间序列上的可爱之处。和许多时间序列分析一样，本文同样使用航空乘客数据（<a href="https://github.com/Yiutto/BlogData/blob/master/AirPassengers.csv">AirPassengers.csv</a>）作为样例。</p>
+<hr>
+<p>数据读取：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">import</span> matplotlib.pylab <span class="keyword">as</span> plt</div><div class="line"><span class="comment"># 读取数据，pd.read_csv默认生成DataFrame对象，需将其转换成Series对象</span></div><div class="line">df = pd.read_csv(<span class="string">'AirPassengers.csv'</span>, encoding=<span class="string">'utf-8'</span>, index_col=<span class="string">'index_col='</span>TravelDate<span class="string">')</span></div><div class="line"><span class="string">df.index = pd.to_datetime(df.index)  # 将字符串索引转换成时间索引</span></div><div class="line"><span class="string">ts = df['</span>Passengers<span class="string">']  # 生成pd.Series对象</span></div><div class="line"><span class="string"># 查看数据格式</span></div><div class="line"><span class="string">ts.head()</span></div><div class="line"><span class="string">ts.head().index</span></div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries10.png" alt="AirPassengers.csv"></p>
+<hr>
+<p>查看某日的值既可以使用字符串作为索引，又可以直接使用时间对象作为索引</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts[<span class="string">'1949-01-01'</span>]</div><div class="line">ts[datetime(<span class="number">1949</span>,<span class="number">1</span>,<span class="number">1</span>)]</div></pre></td></tr></table></figure>
+<p>两者的返回值都是第一个序列值：112</p>
+<hr>
+<p>如果要查看某一年的数据，pandas也能非常方便的实现<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts[<span class="string">'1949'</span>]</div></pre></td></tr></table></figure></p>
+<p><img src="/gallery/timeseries/timeseries11.png" alt="AirPassengers.csv"></p>
+<hr>
+<p>切片操作：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ts[&apos;1949-1&apos; : &apos;1949-6&apos;]</div></pre></td></tr></table></figure></p>
+<p><img src="/gallery/timeseries/timeseries12.png" alt="AirPassengers.csv"></p>
+<hr>
+<p>注意时间索引的切片操作起点和尾部都是包含的，这点与数值索引有所不同</p>
+<p><code>pandas</code>还有很多方便的时间序列函数，在后面的实际应用中在进行说明。</p>
+<h3 id="2-3-3-平稳性检验"><a href="#2-3-3-平稳性检验" class="headerlink" title="2.3.3 平稳性检验"></a>2.3.3 平稳性检验</h3><p>我们知道序列平稳性是进行时间序列分析的前提条件，很多人都会有疑问，为什么要满足平稳性的要求呢？在大数定理和中心定理中要求样本同分布（这里同分布等价于时间序列中的平稳性），而我们的建模过程中有很多都是建立在大数定理和中心极限定理的前提条件下的，如果它不满足，得到的许多结论都是不可靠的。以虚假回归为例，当响应变量和输入变量都平稳时，我们用t统计量检验标准化系数的显著性。而当响应变量和输入变量不平稳时，其标准化系数不在满足t分布，这时再用t检验来进行显著性分析，导致拒绝原假设的概率增加，即容易犯第一类错误，从而得出错误的结论。</p>
+<p>平稳时间序列有两种定义：<em>严平稳</em>和<em>宽平稳</em></p>
+<p>严平稳顾名思义，是一种条件非常苛刻的平稳性，它要求序列随着时间的推移，其统计性质保持不变。对于任意的τ，其联合概率密度函数满足：<br><img src="/gallery/timeseries/gs4.png" alt="公式"></p>
+<p>严平稳的条件只是理论上的存在，现实中用得比较多的是宽平稳的条件。</p>
+<p>宽平稳也叫弱平稳或者二阶平稳（均值和方差平稳），它应满足：</p>
+<ul>
+<li>常数均值</li>
+<li>常数方差</li>
+<li>常数自协方差</li>
+<li>平稳性检验：观察法和单位根检验法</li>
+</ul>
+<p>基于此，我写了一个名为<code>test_stationarity</code>的统计性检验模块，以便将某些统计检验结果更加直观的展现出来。</p>
+<p>从检验结果p值来看，建立的模型效果良好。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># -*- coding:utf-8 -*-</span></div><div class="line"><span class="keyword">from</span> statsmodels.tsa.stattools <span class="keyword">import</span> adfuller</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">from</span> statsmodels.graphics.tsaplots <span class="keyword">import</span> plot_acf, plot_pacf</div><div class="line"></div><div class="line"><span class="comment"># 移动平均图</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_trend</span><span class="params">(timeSeries, size)</span>:</span></div><div class="line">    f = plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    <span class="comment"># 对size个数据进行移动平均</span></div><div class="line">    rol_mean = timeSeries.rolling(window=size).mean()</div><div class="line">    <span class="comment"># 对size个数据进行加权移动平均</span></div><div class="line">    rol_weighted_mean = pd.ewma(timeSeries, span=size)</div><div class="line"></div><div class="line">    timeSeries.plot(color=<span class="string">'blue'</span>, label=<span class="string">'Original'</span>)</div><div class="line">    rol_mean.plot(color=<span class="string">'red'</span>, label=<span class="string">'Rolling Mean'</span>)</div><div class="line">    rol_weighted_mean.plot(color=<span class="string">'black'</span>, label=<span class="string">'Weighted Rolling Mean'</span>)</div><div class="line">    plt.legend(loc=<span class="string">'best'</span>)</div><div class="line">    plt.title(<span class="string">'Rolling Mean'</span>)</div><div class="line">    plt.show()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_ts</span><span class="params">(timeSeries)</span>:</span></div><div class="line">    f = plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    timeSeries.plot(color=<span class="string">'blue'</span>)</div><div class="line">    plt.show()</div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">　　Unit Root Test</span></div><div class="line"><span class="string">The null hypothesis of the Augmented Dickey-Fuller is that there is a unit</span></div><div class="line"><span class="string">root, with the alternative that there is no unit root. That is to say the</span></div><div class="line"><span class="string">bigger the p-value the more reason we assert that there is a unit root</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">testStationarity</span><span class="params">(ts)</span>:</span></div><div class="line">    dftest = adfuller(ts)</div><div class="line">    <span class="comment"># 对上述函数求得的值进行语义描述</span></div><div class="line">    dfoutput = pd.Series(dftest[<span class="number">0</span>:<span class="number">4</span>], index=[<span class="string">'Test Statistic'</span>,<span class="string">'p-value'</span>,<span class="string">'#Lags Used'</span>,<span class="string">'Number of Observations Used'</span>])</div><div class="line">    <span class="keyword">for</span> key,value <span class="keyword">in</span> dftest[<span class="number">4</span>].items():</div><div class="line">    	dfoutput[<span class="string">'Critical Value (%s)'</span>%key] = value</div><div class="line">    <span class="keyword">return</span> dfoutput</div><div class="line"></div><div class="line"><span class="comment"># 自相关和偏相关图，默认阶数为31阶</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_acf_pacf</span><span class="params">(ts, lags=<span class="number">31</span>)</span>:</span></div><div class="line">    f = plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    ax1 = f.add_subplot(<span class="number">211</span>)</div><div class="line">    plot_acf(ts, lags=<span class="number">31</span>, ax=ax1)</div><div class="line">    ax2 = f.add_subplot(<span class="number">212</span>)</div><div class="line">    plot_pacf(ts, lags=<span class="number">31</span>, ax=ax2)</div><div class="line">    plt.show()</div></pre></td></tr></table></figure>
+<p>观察法，通俗的说就是通过观察序列的趋势图与相关图是否随着时间的变化呈现出某种规律。所谓的规律就是时间序列经常提到的周期性因素，现实中遇到得比较多的是线性周期成分，这类周期成分可以采用差分或者移动平均来解决，而对于非线性周期成分的处理相对比较复杂，需要采用某些分解的方法。下图为航空数据的线性图，可以明显的看出它具有年周期成分和长期趋势成分。平稳序列的自相关系数会快速衰减，下面的自相关图并不能体现出该特征，所以我们有理由相信该序列是不平稳的。</p>
+<p><img src="/gallery/timeseries/timeseries13.png" alt="timeSeries"><br><img src="/gallery/timeseries/timeseries14.png" alt="Autocorrelation"></p>
+<p><strong>单位根检验：</strong>ADF是一种常用的单位根检验方法，他的原假设为序列具有单位根，即非平稳，对于一个平稳的时序数据，就需要在给定的置信水平上显著，拒绝原假设。ADF只是单位根检验的方法之一，如果想采用其他检验方法，可以安装第三方包arch，里面提供了更加全面的单位根检验方法，个人还是比较钟情ADF检验。以下为检验结果，其p值大于0.99，说明并不能拒绝原假设。</p>
+<h3 id="2-3-4-平稳性处理"><a href="#2-3-4-平稳性处理" class="headerlink" title="2.3.4 平稳性处理"></a>2.3.4 平稳性处理</h3><p>由前面的分析可知，该序列是不平稳的，然而平稳性是时间序列分析的前提条件，故我们需要对不平稳的序列进行处理将其转换成平稳的序列。</p>
+<h4 id="a-对数变换"><a href="#a-对数变换" class="headerlink" title="a. 对数变换"></a>a. 对数变换</h4><p>对数变换主要是为了减小数据的振动幅度，使其线性规律更加明显（我是这么理解的时间序列模型大部分都是线性的，为了尽量降低非线性的因素，需要对其进行预处理，也许我理解的不对）。对数变换相当于增加了一个惩罚机制，数据越大其惩罚越大，数据越小惩罚越小。这里强调一下，变换的序列需要满足大于0，小于0的数据不存在对数变换。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts_log = np.log(ts)</div><div class="line">draw_ts(ts_log)</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries15.png" alt="log transform"></p>
+<h4 id="b-平滑法"><a href="#b-平滑法" class="headerlink" title="b. 平滑法"></a>b. 平滑法</h4><p>根据平滑技术的不同，平滑法具体分为移动平均法和指数平均法。</p>
+<p>移动平均即利用一定时间间隔内的平均值作为某一期的估计值，而指数平均则是用变权的方法来计算均值<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">draw_trend(ts_log, <span class="number">12</span>)</div></pre></td></tr></table></figure></p>
+<p><img src="/gallery/timeseries/timeseries16.png" alt="Rolling Mean"></p>
+<p>从上图可以发现窗口为12的移动平均能较好的剔除年周期性因素，而指数平均法是对周期内的数据进行了加权，能在一定程度上减小年周期因素，但并不能完全剔除，如要完全剔除可以进一步进行差分操作。</p>
+<h4 id="c-差分"><a href="#c-差分" class="headerlink" title="c.  差分"></a>c.  差分</h4><p>时间序列最常用来剔除周期性因素的方法当属差分了，它主要是对等周期间隔的数据进行线性求减。前面我们说过，<code>ARIMA</code>模型相对<code>ARMA</code>模型，仅多了差分操作，<code>ARIMA</code>模型几乎是所有时间序列软件都支持的，差分的实现与还原都非常方便。而<code>statsmodel</code>中，对差分的支持不是很好，它不支持高阶和多阶差分，为什么不支持，这里引用作者的说法：</p>
+<p><img src="/gallery/timeseries/timeseries17.png" alt="ARIMA"></p>
+<p>作者大概的意思是说预测方法中并没有解决高于2阶的差分，有没有感觉很牵强，不过没关系，我们有<code>pandas</code>。我们可以先用<code>pandas</code>将序列差分好，然后在对差分好的序列进行ARIMA拟合，只不过这样后面会多了一步人工还原的工作。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">diff_12 = ts_log.diff(<span class="number">12</span>)</div><div class="line">diff_12.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">diff_12_1 = diff_12.diff(<span class="number">1</span>)</div><div class="line">diff_12_1.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">testStationarity(diff_12_1)</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries18.png" alt="Test Statistic"></p>
+<p>从上面的统计检验结果可以看出，经过12阶差分和1阶差分后，该序列满足平稳性的要求了。</p>
+<h4 id="d-分解"><a href="#d-分解" class="headerlink" title="d. 分解"></a>d. 分解</h4><p>所谓分解就是将时序数据分离成不同的成分。<code>statsmodels</code>使用的X-11分解过程，它主要将时序数据分离<strong>*成长期趋势</strong>、<strong>季节趋势</strong>和<strong>随机成分</strong>。与其它统计软件一样，<code>statsmodels</code>也支持两类分解模型，加法模型和乘法模型，这里我只实现加法，乘法只需将model的参数设置为”multiplicative”即可。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> statsmodels.tsa.seasonal <span class="keyword">import</span> seasonal_decompose</div><div class="line">decomposition = seasonal_decompose(ts_log, model=<span class="string">"additive"</span>)</div><div class="line"></div><div class="line">trend = decomposition.trend</div><div class="line">seasonal = decomposition.seasonal</div><div class="line">residual = decomposition.resid</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries19.png" alt="statsmodels"></p>
+<p>得到不同的分解成分后，就可以使用时间序列模型对各个成分进行拟合，当然也可以选择其他预测方法。我曾经用过小波对时序数据进行过分解，然后分别采用时间序列拟合，效果还不错。由于我对小波的理解不是很好，只能简单的调用接口，如果有谁对小波、傅里叶、卡尔曼理解得比较透，可以将时序数据进行更加准确的分解，由于分解后的时序数据避免了他们在建模时的交叉影响，所以我相信它将有助于预测准确性的提高。</p>
+<h3 id="2-3-5-模型识别"><a href="#2-3-5-模型识别" class="headerlink" title="2.3.5 模型识别"></a>2.3.5 模型识别</h3><p>在前面的分析可知，该序列具有明显的年周期与长期成分。对于年周期成分我们使用窗口为12的移动平进行处理，对于长期趋势成分我们采用1阶差分来进行处理。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">rol_mean = ts_log.rolling(window=<span class="number">12</span>).mean()</div><div class="line">rol_mean.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">ts_diff_1 = rol_mean.diff(<span class="number">1</span>)</div><div class="line">ts_diff_1.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">testStationarity(ts_diff_1)</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries20.png" alt="testStationarity"></p>
+<p>观察其统计量发现该序列在置信水平为95%的区间下并不显著，我们对其进行再次一阶差分。再次差分后的序列其自相关具有快速衰减的特点，t统计量在99%的置信水平下是显著的，这里我不再做详细说明。</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts_diff_2 = ts_diff_1.diff(<span class="number">1</span>)</div><div class="line">ts_diff_2.dropna(inplace=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries21.png" alt="差分"></p>
+<p>数据平稳后，需要对模型定阶，即确定p、q的阶数。观察上图，发现自相关和偏相系数都存在拖尾的特点，并且他们都具有明显的一阶相关性，所以我们设定p=1,q=1。下面就可以使用ARMA模型进行数据拟合了。这里我不使用ARIMA(ts_diff_1, order=(1, 1, 1))进行拟合，是因为含有差分操作时，预测结果还原老出问题，至今还没弄明白。 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> statsmodels.tsa.arima_model <span class="keyword">import</span> ARMA</div><div class="line">model = ARMA(ts_diff_2, order=(<span class="number">1</span>, <span class="number">1</span>)) </div><div class="line">result_arma = model.fit( disp=<span class="number">-1</span>, method=<span class="string">'css'</span>)</div></pre></td></tr></table></figure>
+<h3 id="2-3-6-样本拟合"><a href="#2-3-6-样本拟合" class="headerlink" title="2.3.6 样本拟合"></a>2.3.6 样本拟合</h3><p>模型拟合完后，我们就可以对其进行预测了。由于ARMA拟合的是经过相关预处理后的数据，故其预测值需要通过相关逆变换进行还原。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">predict_ts = result_arma.predict()</div><div class="line"><span class="comment"># 一阶差分还原</span></div><div class="line">diff_shift_ts = ts_diff_1.shift(<span class="number">1</span>)</div><div class="line">diff_recover_1 = predict_ts.add(diff_shift_ts)</div><div class="line"><span class="comment"># 再次一阶差分还原</span></div><div class="line">rol_shift_ts = rol_mean.shift(<span class="number">1</span>)</div><div class="line">diff_recover = diff_recover_1.add(rol_shift_ts)</div><div class="line"><span class="comment"># 移动平均还原</span></div><div class="line">rol_sum = ts_log.rolling(window=<span class="number">11</span>).sum()</div><div class="line">rol_recover = diff_recover*<span class="number">12</span> - rol_sum.shift(<span class="number">1</span>)</div><div class="line"><span class="comment"># 对数还原</span></div><div class="line">log_recover = np.exp(rol_recover)</div><div class="line">log_recover.dropna(inplace=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<hr>
+<p>我们使用均方根误差（RMSE）来评估模型样本内拟合的好坏。利用该准则进行判别时，需要剔除“非预测”数据的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts = ts[log_recover.index]  <span class="comment"># 过滤没有预测的记录</span></div><div class="line">plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">log_recover.plot(color=<span class="string">'blue'</span>, label=<span class="string">'Predict'</span>)</div><div class="line">ts.plot(color=<span class="string">'red'</span>, label=<span class="string">'Original'</span>)</div><div class="line">plt.legend(loc=<span class="string">'best'</span>)</div><div class="line">plt.title(<span class="string">'RMSE: %.4f'</span>% np.sqrt(sum((log_recover-ts)**<span class="number">2</span>)/ts.size))</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries22.png" alt="RMSE"></p>
+<p>观察上图的拟合效果，均方根误差为11.8828，感觉还过得去。</p>
+<h3 id="2-3-7-完善ARIMA模型"><a href="#2-3-7-完善ARIMA模型" class="headerlink" title="2.3.7 完善ARIMA模型"></a>2.3.7 完善ARIMA模型</h3><p>前面提到statsmodels里面的ARIMA模块不支持高阶差分，我们的做法是将差分分离出来，但是这样会多了一步人工还原的操作。基于上述问题，我将差分过程进行了封装，使序列能按照指定的差分列表依次进行差分，并相应的构造了一个还原的方法，实现差分序列的自动还原。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># 差分操作</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">diff_ts</span><span class="params">(ts, d)</span>:</span></div><div class="line">    <span class="keyword">global</span> shift_ts_list</div><div class="line">    <span class="comment">#  动态预测第二日的值时所需要的差分序列</span></div><div class="line">    <span class="keyword">global</span> last_data_shift_list</div><div class="line">    shift_ts_list = []</div><div class="line">    last_data_shift_list = []</div><div class="line">    tmp_ts = ts</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> d:</div><div class="line">        last_data_shift_list.append(tmp_ts[-i])</div><div class="line">        <span class="keyword">print</span> last_data_shift_list</div><div class="line">        shift_ts = tmp_ts.shift(i)</div><div class="line">        shift_ts_list.append(shift_ts)</div><div class="line">        tmp_ts = tmp_ts - shift_ts</div><div class="line">    tmp_ts.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">return</span> tmp_ts</div><div class="line"></div><div class="line"><span class="comment"># 还原操作</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_diff_recover</span><span class="params">(predict_value, d)</span>:</span></div><div class="line">    <span class="keyword">if</span> isinstance(predict_value, float):</div><div class="line">        tmp_data = predict_value</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(d)):</div><div class="line">            tmp_data = tmp_data + last_data_shift_list[-i<span class="number">-1</span>]</div><div class="line">    <span class="keyword">elif</span> isinstance(predict_value, np.ndarray):</div><div class="line">        tmp_data = predict_value[<span class="number">0</span>]</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(d)):</div><div class="line">            tmp_data = tmp_data + last_data_shift_list[-i<span class="number">-1</span>]</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        tmp_data = predict_value</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(d)):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">               tmp_data = tmp_data.add(shift_ts_list[-i<span class="number">-1</span>])</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">               <span class="keyword">raise</span> ValueError(<span class="string">'What you input is not pd.Series type!'</span>)</div><div class="line">        tmp_data.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">return</span> tmp_data</div></pre></td></tr></table></figure>
+<p>现在我们直接使用差分的方法进行数据处理，并以同样的过程进行数据预测与还原。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">diffed_ts = diff_ts(ts_log, d=[<span class="number">12</span>, <span class="number">1</span>])</div><div class="line">model = arima_model(diffed_ts)</div><div class="line">model.certain_model(<span class="number">1</span>, <span class="number">1</span>)</div><div class="line">predict_ts = model.properModel.predict()</div><div class="line">diff_recover_ts = predict_diff_recover(predict_ts, d=[<span class="number">12</span>, <span class="number">1</span>])</div><div class="line">log_recover = np.exp(diff_recover_ts)</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries23.png" alt="log_recover"></p>
+<p>是不是发现这里的预测结果和上一篇的使用12阶移动平均的预测结果一模一样。这是因为12阶移动平均加上一阶差分与直接12阶差分是等价的关系，后者是前者数值的12倍，这个应该不难推导。<br>对于个数不多的时序数据，我们可以通过观察自相关图和偏相关图来进行模型识别，倘若我们要分析的时序数据量较多，例如要预测每只股票的走势，我们就不可能逐个去调参了。这时我们可以依据BIC准则识别模型的p,q值，通常认为BIC值越小的模型相对更优。这里我简单介绍一下BIC准则，它综合考虑了残差大小和自变量的个数，残差越小BIC值越小，自变量个数越多BIC值越大。个人觉得BIC准则就是对模型过拟合设定了一个标准（过拟合这东西应该以辩证的眼光看待）。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">proper_model</span><span class="params">(data_ts, maxLag)</span>:</span></div><div class="line">    init_bic = sys.maxint</div><div class="line">    init_p = <span class="number">0</span></div><div class="line">    init_q = <span class="number">0</span></div><div class="line">    init_properModel = <span class="keyword">None</span></div><div class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> np.arange(maxLag):</div><div class="line">        <span class="keyword">for</span> q <span class="keyword">in</span> np.arange(maxLag):</div><div class="line">            model = ARMA(data_ts, order=(p, q))</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                results_ARMA = model.fit(disp=<span class="number">-1</span>, method=<span class="string">'css'</span>)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line">            bic = results_ARMA.bic</div><div class="line">            <span class="keyword">if</span> bic &lt; init_bic:</div><div class="line">                init_p = p</div><div class="line">                init_q = q</div><div class="line">                init_properModel = results_ARMA</div><div class="line">                init_bic = bic</div><div class="line">    <span class="keyword">return</span> init_bic, init_p, init_q, init_properModel</div></pre></td></tr></table></figure>
+<p>相对最优参数识别结果：BIC: -1090.44209358 p: 0 q: 1 ， RMSE:11.8817198331。我们发现模型自动识别的参数要比我手动选取的参数更优。</p>
+<h3 id="2-3-8-滚动预测"><a href="#2-3-8-滚动预测" class="headerlink" title="2.3.8 滚动预测"></a>2.3.8 滚动预测</h3><p>所谓滚动预测是指通过添加最新的数据预测第二天的值。对于一个稳定的预测模型，不需要每天都去拟合，我们可以给他设定一个阀值，例如每周拟合一次，该期间只需通过添加最新的数据实现滚动预测即可。基于此我编写了一个名为arima_model的类，主要包含模型自动识别方法，滚动预测的功能，详细代码可以查看附录。数据的动态添加：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> dateutil.relativedelta <span class="keyword">import</span> relativedelta</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_add_new_data</span><span class="params">(ts, dat, type=<span class="string">'day'</span>)</span>:</span></div><div class="line"><span class="keyword">if</span> type == <span class="string">'day'</span>:</div><div class="line">        new_index = ts.index[<span class="number">-1</span>] + relativedelta(days=<span class="number">1</span>)</div><div class="line">    <span class="keyword">elif</span> type == <span class="string">'month'</span>:</div><div class="line">        new_index = ts.index[<span class="number">-1</span>] + relativedelta(months=<span class="number">1</span>)</div><div class="line">    ts[new_index] = dat</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_today_data</span><span class="params">(model, ts,  data, d, type=<span class="string">'day'</span>)</span>:</span></div><div class="line">    _add_new_data(ts, data, type)  <span class="comment"># 为原始序列添加数据</span></div><div class="line">    <span class="comment"># 为滞后序列添加新值</span></div><div class="line">    d_ts = diff_ts(ts, d)</div><div class="line">    model.add_today_data(d_ts[<span class="number">-1</span>], type)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">forecast_next_day_data</span><span class="params">(model, type=<span class="string">'day'</span>)</span>:</span></div><div class="line">    <span class="keyword">if</span> model == <span class="keyword">None</span>:</div><div class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'No model fit before'</span>)</div><div class="line">    fc = model.forecast_next_day_value(type)</div><div class="line">    <span class="keyword">return</span> predict_diff_recover(fc, [<span class="number">12</span>, <span class="number">1</span>])</div></pre></td></tr></table></figure>
+<hr>
+<p>现在我们就可以使用滚动预测的方法向外预测了，取1957年之前的数据作为训练数据，其后的数据作为测试，并设定模型每第七天就会重新拟合一次。这里的diffed_ts对象会随着add_today_data方法自动添加数据，这是由于它与add_today_data方法中的d_ts指向的同一对象，该对象会动态的添加数据。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">ts_train = ts_log[:<span class="string">'1956-12'</span>]</div><div class="line">ts_test = ts_log[<span class="string">'1957-1'</span>:]</div><div class="line"></div><div class="line">diffed_ts = diff_ts(ts_train, [<span class="number">12</span>, <span class="number">1</span>])</div><div class="line">forecast_list = []</div><div class="line"></div><div class="line"><span class="keyword">for</span> i, dta <span class="keyword">in</span> enumerate(ts_test):</div><div class="line">    <span class="keyword">if</span> i%<span class="number">7</span> == <span class="number">0</span>:</div><div class="line">        model = arima_model(diffed_ts)</div><div class="line">        model.certain_model(<span class="number">1</span>, <span class="number">1</span>)</div><div class="line">    forecast_data = forecast_next_day_data(model, type=<span class="string">'month'</span>)</div><div class="line">    forecast_list.append(forecast_data)</div><div class="line">    add_today_data(model, ts_train, dta, [<span class="number">12</span>, <span class="number">1</span>], type=<span class="string">'month'</span>)</div><div class="line"></div><div class="line">predict_ts = pd.Series(data=forecast_list, index=ts[<span class="string">'1957-1'</span>:].index)</div><div class="line">log_recover = np.exp(predict_ts)</div><div class="line">original_ts = ts[<span class="string">'1957-1'</span>:]</div></pre></td></tr></table></figure>
+<p><img src="/gallery/timeseries/timeseries24.png" alt="original_ts"></p>
+<p>动态预测的均方根误差为：14.6479，与前面样本内拟合的均方根误差相差不大，说明模型并没有过拟合，并且整体预测效果都较好。</p>
+<h3 id="2-3-9-模型序列化"><a href="#2-3-9-模型序列化" class="headerlink" title="2.3.9 模型序列化"></a>2.3.9 模型序列化</h3><p>在进行动态预测时，我们不希望将整个模型一直在内存中运行，而是希望有新的数据到来时才启动该模型。这时我们就应该把整个模型从内存导出到硬盘中，而序列化正好能满足该要求。序列化最常用的就是使用json模块了，但是它是时间对象支持得不是很好，有人对json模块进行了拓展以使得支持时间对象，这里我们不采用该方法，我们使用pickle模块，它和json的接口基本相同，有兴趣的可以去查看一下。我在实际应用中是采用的面向对象的编程，它的序列化主要是将类的属性序列化即可，而在面向过程的编程中，模型序列化需要将需要序列化的对象公有化，这样会使得对前面函数的参数改动较大，我不在详细阐述该过程。</p>
+<p><strong>总结</strong></p>
+<p>与其它统计语言相比，python在统计分析这块还显得不那么“专业”。随着numpy、pandas、scipy、sklearn、gensim、statsmodels等包的推动，我相信也祝愿python在数据分析这块越来越好。与SAS和R相比，python的时间序列模块还不是很成熟，我这里仅起到抛砖引玉的作用，希望各位能人志士能贡献自己的力量，使其更加完善。实际应用中我全是面向过程来编写的，为了阐述方便，我用面向过程重新罗列了一遍，实在感觉很不方便。原本打算分三篇来写的，还有一部分实际应用的部分，不打算再写了，还请大家原谅。实际应用主要是具体问题具体分析，这当中第一步就是要查询问题，这步花的时间往往会比较多，然后再是解决问题。以我前面项目遇到的问题为例，当时遇到了以下几个典型的问题：1.周期长度不恒定的周期成分，例如每月的1号具有周期性，但每月1号与1号之间的时间间隔是不相等的；2.含有缺失值以及含有记录为0的情况无法进行对数变换；3.节假日的影响等等。</p>
+<p>代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># -*-coding:utf-8-*-</span></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">from</span> statsmodels.tsa.arima_model <span class="keyword">import</span> ARMA</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">from</span> dateutil.relativedelta <span class="keyword">import</span> relativedelta</div><div class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> deepcopy</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">arima_model</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ts, maxLag=<span class="number">9</span>)</span>:</span></div><div class="line">        self.data_ts = ts</div><div class="line">        self.resid_ts = <span class="keyword">None</span></div><div class="line">        self.predict_ts = <span class="keyword">None</span></div><div class="line">        self.maxLag = maxLag</div><div class="line">        self.p = maxLag</div><div class="line">        self.q = maxLag</div><div class="line">        self.properModel = <span class="keyword">None</span></div><div class="line">        self.bic = sys.maxint</div><div class="line"></div><div class="line">    <span class="comment"># 计算最优ARIMA模型，将相关结果赋给相应属性</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_proper_model</span><span class="params">(self)</span>:</span></div><div class="line">        self._proper_model()</div><div class="line">        self.predict_ts = deepcopy(self.properModel.predict())</div><div class="line">        self.resid_ts = deepcopy(self.properModel.resid)</div><div class="line"></div><div class="line">    <span class="comment"># 对于给定范围内的p,q计算拟合得最好的arima模型，这里是对差分好的数据进行拟合，故差分恒为0</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_proper_model</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> np.arange(self.maxLag):</div><div class="line">            <span class="keyword">for</span> q <span class="keyword">in</span> np.arange(self.maxLag):</div><div class="line">                <span class="comment"># print p,q,self.bic</span></div><div class="line">                model = ARMA(self.data_ts, order=(p, q))</div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                    results_ARMA = model.fit(disp=<span class="number">-1</span>, method=<span class="string">'css'</span>)</div><div class="line">                <span class="keyword">except</span>:</div><div class="line">                    <span class="keyword">continue</span></div><div class="line">                bic = results_ARMA.bic</div><div class="line">                <span class="comment"># print 'bic:',bic,'self.bic:',self.bic</span></div><div class="line">                <span class="keyword">if</span> bic &lt; self.bic:</div><div class="line">                    self.p = p</div><div class="line">                    self.q = q</div><div class="line">                    self.properModel = results_ARMA</div><div class="line">                    self.bic = bic</div><div class="line">                    self.resid_ts = deepcopy(self.properModel.resid)</div><div class="line">                    self.predict_ts = self.properModel.predict()</div><div class="line"></div><div class="line">    <span class="comment"># 参数确定模型</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">certain_model</span><span class="params">(self, p, q)</span>:</span></div><div class="line">            model = ARMA(self.data_ts, order=(p, q))</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                self.properModel = model.fit( disp=<span class="number">-1</span>, method=<span class="string">'css'</span>)</div><div class="line">                self.p = p</div><div class="line">                self.q = q</div><div class="line">                self.bic = self.properModel.bic</div><div class="line">                self.predict_ts = self.properModel.predict()</div><div class="line">                self.resid_ts = deepcopy(self.properModel.resid)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">'You can not fit the model with this parameter p,q, '</span> \</div><div class="line">                      <span class="string">'please use the get_proper_model method to get the best model'</span></div><div class="line"></div><div class="line">    <span class="comment"># 预测第二日的值</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forecast_next_day_value</span><span class="params">(self, type=<span class="string">'day'</span>)</span>:</span></div><div class="line">        <span class="comment"># 我修改了statsmodels包中arima_model的源代码，添加了constant属性，需要先运行forecast方法，为constant赋值</span></div><div class="line">        self.properModel.forecast()</div><div class="line">        <span class="keyword">if</span> self.data_ts.index[<span class="number">-1</span>] != self.resid_ts.index[<span class="number">-1</span>]:</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'''The index is different in data_ts and resid_ts, please add new data to data_ts.</span></div><div class="line"><span class="string">            If you just want to forecast the next day data without add the real next day data to data_ts,</span></div><div class="line"><span class="string">            please run the predict method which arima_model included itself'''</span>)</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.properModel:</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'The arima model have not computed, please run the proper_model method before'</span>)</div><div class="line">        para = self.properModel.params</div><div class="line"></div><div class="line">        <span class="comment"># print self.properModel.params</span></div><div class="line">        <span class="keyword">if</span> self.p == <span class="number">0</span>:   <span class="comment"># It will get all the value series with setting self.data_ts[-self.p:] when p is zero</span></div><div class="line">            ma_value = self.resid_ts[-self.q:]</div><div class="line">            values = ma_value.reindex(index=ma_value.index[::<span class="number">-1</span>])</div><div class="line">        <span class="keyword">elif</span> self.q == <span class="number">0</span>:</div><div class="line">            ar_value = self.data_ts[-self.p:]</div><div class="line">            values = ar_value.reindex(index=ar_value.index[::<span class="number">-1</span>])</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            ar_value = self.data_ts[-self.p:]</div><div class="line">            ar_value = ar_value.reindex(index=ar_value.index[::<span class="number">-1</span>])</div><div class="line">            ma_value = self.resid_ts[-self.q:]</div><div class="line">            ma_value = ma_value.reindex(index=ma_value.index[::<span class="number">-1</span>])</div><div class="line">            values = ar_value.append(ma_value)</div><div class="line"></div><div class="line">        predict_value = np.dot(para[<span class="number">1</span>:], values) + self.properModel.constant[<span class="number">0</span>]</div><div class="line">        self._add_new_data(self.predict_ts, predict_value, type)</div><div class="line">        <span class="keyword">return</span> predict_value</div><div class="line"></div><div class="line">    <span class="comment"># 动态添加数据函数，针对索引是月份和日分别进行处理</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_add_new_data</span><span class="params">(self, ts, dat, type=<span class="string">'day'</span>)</span>:</span></div><div class="line">        <span class="keyword">if</span> type == <span class="string">'day'</span>:</div><div class="line">            new_index = ts.index[<span class="number">-1</span>] + relativedelta(days=<span class="number">1</span>)</div><div class="line">        <span class="keyword">elif</span> type == <span class="string">'month'</span>:</div><div class="line">            new_index = ts.index[<span class="number">-1</span>] + relativedelta(months=<span class="number">1</span>)</div><div class="line">        ts[new_index] = dat</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_today_data</span><span class="params">(self, dat, type=<span class="string">'day'</span>)</span>:</span></div><div class="line">        self._add_new_data(self.data_ts, dat, type)</div><div class="line">        <span class="keyword">if</span> self.data_ts.index[<span class="number">-1</span>] != self.predict_ts.index[<span class="number">-1</span>]:</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'You must use the forecast_next_day_value method forecast the value of today before'</span>)</div><div class="line">        self._add_new_data(self.resid_ts, self.data_ts[<span class="number">-1</span>] - self.predict_ts[<span class="number">-1</span>], type)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    df = pd.read_csv(<span class="string">'AirPassengers.csv'</span>, encoding=<span class="string">'utf-8'</span>, index_col=<span class="string">'date'</span>)</div><div class="line">    df.index = pd.to_datetime(df.index)</div><div class="line">    ts = df[<span class="string">'x'</span>]</div><div class="line"></div><div class="line">    <span class="comment"># 数据预处理</span></div><div class="line">    ts_log = np.log(ts)</div><div class="line">    rol_mean = ts_log.rolling(window=<span class="number">12</span>).mean()</div><div class="line">    rol_mean.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">    ts_diff_1 = rol_mean.diff(<span class="number">1</span>)</div><div class="line">    ts_diff_1.dropna(inplace=<span class="keyword">True</span>)</div><div class="line">    ts_diff_2 = ts_diff_1.diff(<span class="number">1</span>)</div><div class="line">    ts_diff_2.dropna(inplace=<span class="keyword">True</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 模型拟合</span></div><div class="line">    model = arima_model(ts_diff_2)</div><div class="line">    <span class="comment">#  这里使用模型参数自动识别</span></div><div class="line">    model.get_proper_model()</div><div class="line">    <span class="keyword">print</span> <span class="string">'bic:'</span>, model.bic, <span class="string">'p:'</span>, model.p, <span class="string">'q:'</span>, model.q</div><div class="line">    <span class="keyword">print</span> model.properModel.forecast()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">print</span> model.forecast_next_day_value(type=<span class="string">'month'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 预测结果还原</span></div><div class="line">    predict_ts = model.properModel.predict()</div><div class="line">    diff_shift_ts = ts_diff_1.shift(<span class="number">1</span>)</div><div class="line">    diff_recover_1 = predict_ts.add(diff_shift_ts)</div><div class="line">    rol_shift_ts = rol_mean.shift(<span class="number">1</span>)</div><div class="line">    diff_recover = diff_recover_1.add(rol_shift_ts)</div><div class="line">    rol_sum = ts_log.rolling(window=<span class="number">11</span>).sum()</div><div class="line">    rol_recover = diff_recover*<span class="number">12</span> - rol_sum.shift(<span class="number">1</span>)</div><div class="line">    log_recover = np.exp(rol_recover)</div><div class="line">    log_recover.dropna(inplace=<span class="keyword">True</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 预测结果作图</span></div><div class="line">    ts = ts[log_recover.index]</div><div class="line">    plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    log_recover.plot(color=<span class="string">'blue'</span>, label=<span class="string">'Predict'</span>)</div><div class="line">    ts.plot(color=<span class="string">'red'</span>, label=<span class="string">'Original'</span>)</div><div class="line">    plt.legend(loc=<span class="string">'best'</span>)</div><div class="line">    plt.title(<span class="string">'RMSE: %.4f'</span>% np.sqrt(sum((log_recover-ts)**<span class="number">2</span>)/ts.size))</div><div class="line">    plt.show()</div></pre></td></tr></table></figure>
+<h1 id="3-LSTM"><a href="#3-LSTM" class="headerlink" title="3.LSTM"></a>3.LSTM</h1><p>关于技术理论部分，可以参考这两篇文章（<a href="http://blog.csdn.net/a819825294/article/details/53465628" target="_blank" rel="external">RNN</a>、<a href="http://blog.csdn.net/a819825294/article/details/53487913" target="_blank" rel="external">LSTM</a>），本文主要从数据、代码角度，利用LSTM进行时间序列预测。</p>
+<p>时间序列（或称动态数列）是指将同一统计指标的数值按其发生的时间先后顺序排列而成的数列。时间序列分析的主要目的是根据已有的历史数据对未来进行预测。</p>
+<p>时间序列构成要素：长期趋势，季节变动，循环变动，不规则变动</p>
+<p>长期趋势（ T ）现象在较长时期内受某种根本性因素作用而形成的总的变动趋势<br>季节变动（ S ）现象在一年内随着季节的变化而发生的有规律的周期性变动<br>循环变动（ C ）现象以若干年为周期所呈现出的波浪起伏形态的有规律的变动<br>不规则变动（I ）是一种无规律可循的变动，包括严格的随机变动和不规则的突发性影响很大的变动两种类型<br>（1）原始时间序列数据（只列出了18行）</p>
+<blockquote>
+<p>1455.219971<br>1399.420044<br>1402.109985<br>1403.449951<br>1441.469971<br>1457.599976<br>1438.560059<br>1432.25<br>1449.680054<br>1465.150024<br>1455.140015<br>1455.900024<br>1445.569946<br>1441.359985<br>1401.530029<br>1410.030029<br>1404.089966<br>1398.560059</p>
+</blockquote>
+<p>（2）处理数据使之符合LSTM的要求</p>
+<p>为了更加直观的了解数据格式，代码中加入了一些打印（print），并且后面加了注释，就是输出值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_data</span><span class="params">(filename, seq_len)</span>:</span></div><div class="line">    f = open(filename, <span class="string">'rb'</span>).read()</div><div class="line">    data = f.split(<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    print(<span class="string">'data len:'</span>,len(data))       <span class="comment">#4172</span></div><div class="line">    print(<span class="string">'sequence len:'</span>,seq_len)     <span class="comment">#50</span></div><div class="line"></div><div class="line">    sequence_length = seq_len + <span class="number">1</span></div><div class="line">    result = []</div><div class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(len(data) - sequence_length):</div><div class="line">        result.append(data[index: index + sequence_length])  <span class="comment">#得到长度为seq_len+1的向量，最后一个作为label</span></div><div class="line"></div><div class="line">    print(<span class="string">'result len:'</span>,len(result))   <span class="comment">#4121</span></div><div class="line">    print(<span class="string">'result shape:'</span>,np.array(result).shape)  <span class="comment">#（4121,51）</span></div><div class="line"></div><div class="line">    result = np.array(result)</div><div class="line"></div><div class="line">    <span class="comment">#划分train、test</span></div><div class="line">    row = round(<span class="number">0.9</span> * result.shape[<span class="number">0</span>])</div><div class="line">    train = result[:row, :]</div><div class="line">    np.random.shuffle(train)</div><div class="line">    x_train = train[:, :<span class="number">-1</span>]</div><div class="line">    y_train = train[:, <span class="number">-1</span>]</div><div class="line">    x_test = result[row:, :<span class="number">-1</span>]</div><div class="line">    y_test = result[row:, <span class="number">-1</span>]</div><div class="line"></div><div class="line">    x_train = np.reshape(x_train, (x_train.shape[<span class="number">0</span>], x_train.shape[<span class="number">1</span>], <span class="number">1</span>))</div><div class="line">    x_test = np.reshape(x_test, (x_test.shape[<span class="number">0</span>], x_test.shape[<span class="number">1</span>], <span class="number">1</span>))  </div><div class="line"></div><div class="line">    print(<span class="string">'X_train shape:'</span>,X_train.shape)  <span class="comment">#(3709L, 50L, 1L)</span></div><div class="line">    print(<span class="string">'y_train shape:'</span>,y_train.shape)  <span class="comment">#(3709L,)</span></div><div class="line">    print(<span class="string">'X_test shape:'</span>,X_test.shape)    <span class="comment">#(412L, 50L, 1L)</span></div><div class="line">    print(<span class="string">'y_test shape:'</span>,y_test.shape)    <span class="comment">#(412L,)</span></div><div class="line"></div><div class="line">    <span class="keyword">return</span> [x_train, y_train, x_test, y_test]</div></pre></td></tr></table></figure>
+<p>（3）LSTM模型</p>
+<p>本文使用的是<a href="http://lib.csdn.net/base/deeplearning" target="_blank" rel="external">keras</a>深度学习框架，读者可能用的是其他的，诸如<code>theano</code>、<code>tensorflow</code>等，大同小异。</p>
+<p><a href="https://keras.io/layers/recurrent/#lstm" target="_blank" rel="external">Keras LSTM官方文档</a></p>
+<p>LSTM的结构可以自己定制，Stack LSTM or Bidirectional LSTM</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_model</span><span class="params">(layers)</span>:</span>  <span class="comment">#layers [1,50,100,1]</span></div><div class="line">    model = Sequential()</div><div class="line"></div><div class="line">    <span class="comment">#Stack LSTM</span></div><div class="line">    model.add(LSTM(input_dim=layers[<span class="number">0</span>],output_dim=layers[<span class="number">1</span>],return_sequences=<span class="keyword">True</span>))</div><div class="line">    model.add(Dropout(<span class="number">0.2</span>))</div><div class="line"></div><div class="line">    model.add(LSTM(layers[<span class="number">2</span>],return_sequences=<span class="keyword">False</span>))</div><div class="line">    model.add(Dropout(<span class="number">0.2</span>))</div><div class="line"></div><div class="line">    model.add(Dense(output_dim=layers[<span class="number">3</span>]))</div><div class="line">    model.add(Activation(<span class="string">"linear"</span>))</div><div class="line"></div><div class="line">    start = time.time()</div><div class="line">    model.compile(loss=<span class="string">"mse"</span>, optimizer=<span class="string">"rmsprop"</span>)</div><div class="line">    print(<span class="string">"Compilation Time : "</span>, time.time() - start)</div><div class="line">    <span class="keyword">return</span> model</div></pre></td></tr></table></figure>
+<p>（4）LSTM训练预测</p>
+<p>1.直接预测</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_point_by_point</span><span class="params">(model, data)</span>:</span></div><div class="line">    predicted = model.predict(data)</div><div class="line">    print(<span class="string">'predicted shape:'</span>,np.array(predicted).shape)  <span class="comment">#(412L,1L)</span></div><div class="line">    predicted = np.reshape(predicted, (predicted.size,))</div><div class="line">    <span class="keyword">return</span> predicted</div></pre></td></tr></table></figure>
+<p>2.滚动预测</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_sequence_full</span><span class="params">(model, data, window_size)</span>:</span>  <span class="comment">#data X_test</span></div><div class="line">    curr_frame = data[<span class="number">0</span>]  <span class="comment">#(50L,1L)</span></div><div class="line">    predicted = []</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(data)):</div><div class="line">        <span class="comment">#x = np.array([[[1],[2],[3]], [[4],[5],[6]]])  x.shape (2, 3, 1) x[0,0] = array([1])  x[:,np.newaxis,:,:].shape  (2, 1, 3, 1)</span></div><div class="line">        predicted.append(model.predict(curr_frame[newaxis,:,:])[<span class="number">0</span>,<span class="number">0</span>])  <span class="comment">#np.array(curr_frame[newaxis,:,:]).shape (1L,50L,1L)</span></div><div class="line">        curr_frame = curr_frame[<span class="number">1</span>:]</div><div class="line">        curr_frame = np.insert(curr_frame, [window_size<span class="number">-1</span>], predicted[<span class="number">-1</span>], axis=<span class="number">0</span>)   <span class="comment">#numpy.insert(arr, obj, values, axis=None)</span></div><div class="line">    <span class="keyword">return</span> predicted</div></pre></td></tr></table></figure>
+<p>3.滑动窗口+滚动预测</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_sequences_multiple</span><span class="params">(model, data, window_size, prediction_len)</span>:</span>  <span class="comment">#window_size = seq_len</span></div><div class="line">    prediction_seqs = []</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(data)/prediction_len):</div><div class="line">        curr_frame = data[i*prediction_len]</div><div class="line">        predicted = []</div><div class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> xrange(prediction_len):</div><div class="line">            predicted.append(model.predict(curr_frame[newaxis,:,:])[<span class="number">0</span>,<span class="number">0</span>])</div><div class="line">            curr_frame = curr_frame[<span class="number">1</span>:]</div><div class="line">            curr_frame = np.insert(curr_frame, [window_size<span class="number">-1</span>], predicted[<span class="number">-1</span>], axis=<span class="number">0</span>)</div><div class="line">        prediction_seqs.append(predicted)</div><div class="line">    <span class="keyword">return</span> prediction_seqs</div></pre></td></tr></table></figure>
+<p><strong>完整代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</div><div class="line"></div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> warnings</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> newaxis</div><div class="line"><span class="keyword">from</span> keras.layers.core <span class="keyword">import</span> Dense, Activation, Dropout</div><div class="line"><span class="keyword">from</span> keras.layers.recurrent <span class="keyword">import</span> LSTM</div><div class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</div><div class="line"></div><div class="line">warnings.filterwarnings(<span class="string">"ignore"</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_data</span><span class="params">(filename, seq_len, normalise_window)</span>:</span></div><div class="line">    f = open(filename, <span class="string">'rb'</span>).read()</div><div class="line">    data = f.split(<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    print(<span class="string">'data len:'</span>,len(data))</div><div class="line">    print(<span class="string">'sequence len:'</span>,seq_len)</div><div class="line"></div><div class="line">    sequence_length = seq_len + <span class="number">1</span></div><div class="line">    result = []</div><div class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(len(data) - sequence_length):</div><div class="line">        result.append(data[index: index + sequence_length])  <span class="comment">#得到长度为seq_len+1的向量，最后一个作为label</span></div><div class="line"></div><div class="line">    print(<span class="string">'result len:'</span>,len(result))</div><div class="line">    print(<span class="string">'result shape:'</span>,np.array(result).shape)</div><div class="line">    print(result[:<span class="number">1</span>])</div><div class="line"></div><div class="line">    <span class="keyword">if</span> normalise_window:</div><div class="line">        result = normalise_windows(result)</div><div class="line"></div><div class="line">    print(result[:<span class="number">1</span>])</div><div class="line">    print(<span class="string">'normalise_windows result shape:'</span>,np.array(result).shape)</div><div class="line"></div><div class="line">    result = np.array(result)</div><div class="line"></div><div class="line">    <span class="comment">#划分train、test</span></div><div class="line">    row = round(<span class="number">0.9</span> * result.shape[<span class="number">0</span>])</div><div class="line">    train = result[:row, :]</div><div class="line">    np.random.shuffle(train)</div><div class="line">    x_train = train[:, :<span class="number">-1</span>]</div><div class="line">    y_train = train[:, <span class="number">-1</span>]</div><div class="line">    x_test = result[row:, :<span class="number">-1</span>]</div><div class="line">    y_test = result[row:, <span class="number">-1</span>]</div><div class="line"></div><div class="line">    x_train = np.reshape(x_train, (x_train.shape[<span class="number">0</span>], x_train.shape[<span class="number">1</span>], <span class="number">1</span>))</div><div class="line">    x_test = np.reshape(x_test, (x_test.shape[<span class="number">0</span>], x_test.shape[<span class="number">1</span>], <span class="number">1</span>))  </div><div class="line"></div><div class="line">    <span class="keyword">return</span> [x_train, y_train, x_test, y_test]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalise_windows</span><span class="params">(window_data)</span>:</span></div><div class="line">    normalised_data = []</div><div class="line">    <span class="keyword">for</span> window <span class="keyword">in</span> window_data:   <span class="comment">#window shape (sequence_length L ,)  即(51L,)</span></div><div class="line">        normalised_window = [((float(p) / float(window[<span class="number">0</span>])) - <span class="number">1</span>) <span class="keyword">for</span> p <span class="keyword">in</span> window]</div><div class="line">        normalised_data.append(normalised_window)</div><div class="line">    <span class="keyword">return</span> normalised_data</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_model</span><span class="params">(layers)</span>:</span>  <span class="comment">#layers [1,50,100,1]</span></div><div class="line">    model = Sequential()</div><div class="line"></div><div class="line">    model.add(LSTM(input_dim=layers[<span class="number">0</span>],output_dim=layers[<span class="number">1</span>],return_sequences=<span class="keyword">True</span>))</div><div class="line">    model.add(Dropout(<span class="number">0.2</span>))</div><div class="line"></div><div class="line">    model.add(LSTM(layers[<span class="number">2</span>],return_sequences=<span class="keyword">False</span>))</div><div class="line">    model.add(Dropout(<span class="number">0.2</span>))</div><div class="line"></div><div class="line">    model.add(Dense(output_dim=layers[<span class="number">3</span>]))</div><div class="line">    model.add(Activation(<span class="string">"linear"</span>))</div><div class="line"></div><div class="line">    start = time.time()</div><div class="line">    model.compile(loss=<span class="string">"mse"</span>, optimizer=<span class="string">"rmsprop"</span>)</div><div class="line">    print(<span class="string">"Compilation Time : "</span>, time.time() - start)</div><div class="line">    <span class="keyword">return</span> model</div><div class="line"></div><div class="line"><span class="comment">#直接全部预测</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_point_by_point</span><span class="params">(model, data)</span>:</span></div><div class="line">    predicted = model.predict(data)</div><div class="line">    print(<span class="string">'predicted shape:'</span>,np.array(predicted).shape)  <span class="comment">#(412L,1L)</span></div><div class="line">    predicted = np.reshape(predicted, (predicted.size,))</div><div class="line">    <span class="keyword">return</span> predicted</div><div class="line"></div><div class="line"><span class="comment">#滚动预测</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_sequence_full</span><span class="params">(model, data, window_size)</span>:</span>  <span class="comment">#data X_test</span></div><div class="line">    curr_frame = data[<span class="number">0</span>]  <span class="comment">#(50L,1L)</span></div><div class="line">    predicted = []</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(data)):</div><div class="line">        <span class="comment">#x = np.array([[[1],[2],[3]], [[4],[5],[6]]])  x.shape (2, 3, 1) x[0,0] = array([1])  x[:,np.newaxis,:,:].shape  (2, 1, 3, 1)</span></div><div class="line">        predicted.append(model.predict(curr_frame[newaxis,:,:])[<span class="number">0</span>,<span class="number">0</span>])  <span class="comment">#np.array(curr_frame[newaxis,:,:]).shape (1L,50L,1L)</span></div><div class="line">        curr_frame = curr_frame[<span class="number">1</span>:]</div><div class="line">        curr_frame = np.insert(curr_frame, [window_size<span class="number">-1</span>], predicted[<span class="number">-1</span>], axis=<span class="number">0</span>)   <span class="comment">#numpy.insert(arr, obj, values, axis=None)</span></div><div class="line">    <span class="keyword">return</span> predicted</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_sequences_multiple</span><span class="params">(model, data, window_size, prediction_len)</span>:</span>  <span class="comment">#window_size = seq_len</span></div><div class="line">    prediction_seqs = []</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(data)/prediction_len):</div><div class="line">        curr_frame = data[i*prediction_len]</div><div class="line">        predicted = []</div><div class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> xrange(prediction_len):</div><div class="line">            predicted.append(model.predict(curr_frame[newaxis,:,:])[<span class="number">0</span>,<span class="number">0</span>])</div><div class="line">            curr_frame = curr_frame[<span class="number">1</span>:]</div><div class="line">            curr_frame = np.insert(curr_frame, [window_size<span class="number">-1</span>], predicted[<span class="number">-1</span>], axis=<span class="number">0</span>)</div><div class="line">        prediction_seqs.append(predicted)</div><div class="line">    <span class="keyword">return</span> prediction_seqs</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_results</span><span class="params">(predicted_data, true_data, filename)</span>:</span></div><div class="line">    fig = plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    ax = fig.add_subplot(<span class="number">111</span>)</div><div class="line">    ax.plot(true_data, label=<span class="string">'True Data'</span>)</div><div class="line">    plt.plot(predicted_data, label=<span class="string">'Prediction'</span>)</div><div class="line">    plt.legend()</div><div class="line">    plt.show()</div><div class="line">    plt.savefig(filename+<span class="string">'.png'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_results_multiple</span><span class="params">(predicted_data, true_data, prediction_len)</span>:</span></div><div class="line">    fig = plt.figure(facecolor=<span class="string">'white'</span>)</div><div class="line">    ax = fig.add_subplot(<span class="number">111</span>)</div><div class="line">    ax.plot(true_data, label=<span class="string">'True Data'</span>)</div><div class="line">    <span class="comment">#Pad the list of predictions to shift it in the graph to it's correct start</span></div><div class="line">    <span class="keyword">for</span> i, data <span class="keyword">in</span> enumerate(predicted_data):</div><div class="line">        padding = [<span class="keyword">None</span> <span class="keyword">for</span> p <span class="keyword">in</span> xrange(i * prediction_len)]</div><div class="line">        plt.plot(padding + data, label=<span class="string">'Prediction'</span>)</div><div class="line">        plt.legend()</div><div class="line">    plt.show()</div><div class="line">    plt.savefig(<span class="string">'plot_results_multiple.png'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</div><div class="line">    global_start_time = time.time()</div><div class="line">    epochs  = <span class="number">1</span></div><div class="line">    seq_len = <span class="number">50</span></div><div class="line"></div><div class="line">    print(<span class="string">'&gt; Loading data... '</span>)</div><div class="line"></div><div class="line">    X_train, y_train, X_test, y_test = lstm.load_data(<span class="string">'sp500.csv'</span>, seq_len, <span class="keyword">True</span>)</div><div class="line"></div><div class="line">    print(<span class="string">'X_train shape:'</span>,X_train.shape)  <span class="comment">#(3709L, 50L, 1L)</span></div><div class="line">    print(<span class="string">'y_train shape:'</span>,y_train.shape)  <span class="comment">#(3709L,)</span></div><div class="line">    print(<span class="string">'X_test shape:'</span>,X_test.shape)    <span class="comment">#(412L, 50L, 1L)</span></div><div class="line">    print(<span class="string">'y_test shape:'</span>,y_test.shape)    <span class="comment">#(412L,)</span></div><div class="line"></div><div class="line">    print(<span class="string">'&gt; Data Loaded. Compiling...'</span>)</div><div class="line"></div><div class="line">    model = lstm.build_model([<span class="number">1</span>, <span class="number">50</span>, <span class="number">100</span>, <span class="number">1</span>])</div><div class="line"></div><div class="line">    model.fit(X_train,y_train,batch_size=<span class="number">512</span>,nb_epoch=epochs,validation_split=<span class="number">0.05</span>)</div><div class="line"></div><div class="line">    multiple_predictions = lstm.predict_sequences_multiple(model, X_test, seq_len, prediction_len=<span class="number">50</span>)</div><div class="line">    print(<span class="string">'multiple_predictions shape:'</span>,np.array(multiple_predictions).shape)   <span class="comment">#(8L,50L)</span></div><div class="line"></div><div class="line">    full_predictions = lstm.predict_sequence_full(model, X_test, seq_len)</div><div class="line">    print(<span class="string">'full_predictions shape:'</span>,np.array(full_predictions).shape)    <span class="comment">#(412L,)</span></div><div class="line"></div><div class="line">    point_by_point_predictions = lstm.predict_point_by_point(model, X_test)</div><div class="line">    print(<span class="string">'point_by_point_predictions shape:'</span>,np.array(point_by_point_predictions).shape)  <span class="comment">#(412L)</span></div><div class="line"></div><div class="line">    print(<span class="string">'Training duration (s) : '</span>, time.time() - global_start_time)</div><div class="line"></div><div class="line">    plot_results_multiple(multiple_predictions, y_test, <span class="number">50</span>)</div><div class="line">    plot_results(full_predictions,y_test,<span class="string">'full_predictions'</span>)</div><div class="line">    plot_results(point_by_point_predictions,y_test,<span class="string">'point_by_point_predictions'</span>)</div></pre></td></tr></table></figure>
+<h1 id="来源"><a href="#来源" class="headerlink" title="来源:"></a>来源:</h1><p>相关博客：</p>
+<p><a href="http://www.cnblogs.com/foley/p/5582358.html" target="_blank" rel="external">http://www.cnblogs.com/foley/p/5582358.html</a></p>
+<p><a href="http://www.10tiao.com/html/284/201608/2652390079/1.html" target="_blank" rel="external">http://www.10tiao.com/html/284/201608/2652390079/1.html</a></p>
+<p><a href="http://blog.csdn.net/a819825294/article/details/54376781" target="_blank" rel="external">http://blog.csdn.net/a819825294/article/details/54376781</a></p>
+<p><a href="http://www.cnblogs.com/arkenstone/p/5794063.html" target="_blank" rel="external">http://www.cnblogs.com/arkenstone/p/5794063.html</a></p>
+
+		<div style="text-align:center;color: #ccc;font-size:17px;">
+		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
+	</div>  
+  
+    
+    <footer class="entry-meta entry-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Wepay.png',
+  alipayImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Alipay.png'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTcwNS84MjY5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+	  <hr class="entry-footer-hr">
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/24/IDEA快捷键个人整理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">IDEA快捷键个人整理（Windows下）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1.定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-时间序列的预处理"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 时间序列的预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-不平稳，怎么办？"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 不平稳，怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-平稳时间序列建模"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 平稳时间序列建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-python实例操作"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 python实例操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-TimeSeries"><span class="nav-number">2.</span> <span class="nav-text">2.TimeSeries</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-什么是时间序列"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是时间序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-为什么用python"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 为什么用python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-时间序列分析"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 时间序列分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-基本模型"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 基本模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-pandas时间序列操作"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 pandas时间序列操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-平稳性检验"><span class="nav-number">2.3.3.</span> <span class="nav-text">2.3.3 平稳性检验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-平稳性处理"><span class="nav-number">2.3.4.</span> <span class="nav-text">2.3.4 平稳性处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-对数变换"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">a. 对数变换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-平滑法"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">b. 平滑法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-差分"><span class="nav-number">2.3.4.3.</span> <span class="nav-text">c.  差分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#d-分解"><span class="nav-number">2.3.4.4.</span> <span class="nav-text">d. 分解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-5-模型识别"><span class="nav-number">2.3.5.</span> <span class="nav-text">2.3.5 模型识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-6-样本拟合"><span class="nav-number">2.3.6.</span> <span class="nav-text">2.3.6 样本拟合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-7-完善ARIMA模型"><span class="nav-number">2.3.7.</span> <span class="nav-text">2.3.7 完善ARIMA模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-8-滚动预测"><span class="nav-number">2.3.8.</span> <span class="nav-text">2.3.8 滚动预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-9-模型序列化"><span class="nav-number">2.3.9.</span> <span class="nav-text">2.3.9 模型序列化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-LSTM"><span class="nav-number">3.</span> <span class="nav-text">3.LSTM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#来源"><span class="nav-number">4.</span> <span class="nav-text">来源:</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2017 Programming prodigal All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/mybooks" class="mobile-nav-link">Books</a>
+  
+    <a href="/favorites" class="mobile-nav-link">Favorites</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Programming prodigal
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 Yiutto All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
