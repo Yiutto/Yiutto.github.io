@@ -62,9 +62,11 @@ tags:
 
 ![mllib](/gallery/IntelliJ-IDEA-Maven-Scala/maven3.png)
 
-这里我根据我的Scala包选择,将里面的代码复制到`pom.xml`，这样，Maven就会开始自动下载jar包到本地仓库，然后关联到你的项目中。如下图
+这里我根据我的Scala包选择,将里面的代码复制到`pom.xml`，然后右击`Maven` -> `Reimport`。(耐心的等把)这样，Maven就会开始自动下载jar包到本地仓库，然后关联到你的项目中。如下图
 
 ![mllib](/gallery/IntelliJ-IDEA-Maven-Scala/maven4.png)
+![mllib](/gallery/IntelliJ-IDEA-Maven-Scala/maven5.png)
+
 
 下载完成后，查看External Libraries，会不会发现，瞬间导入了好多jar包（当然不是瞬间，这得看你的网速了）呢。
 

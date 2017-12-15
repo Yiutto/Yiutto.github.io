@@ -300,7 +300,7 @@ git是一个版本控制的工具，而github有点类似于远程仓库，用�
 
 - **添加博客**
 
-`hexo post new "MyFirstBlog"`
+`hexo new post "MyFirstBlog"`
 
 这时会在source\_posts文件夹下生成一个*MyFirstBlog.md*，具体设置如下
 
@@ -319,7 +319,7 @@ git是一个版本控制的工具，而github有点类似于远程仓库，用�
 
 - **设置tags**
 
-`hexo page new "Tags"`
+`hexo new page "Tags"`
 	
 这时会在source\tags文件夹下生成一个*index.md*，具体如下
 
@@ -334,7 +334,7 @@ git是一个版本控制的工具，而github有点类似于远程仓库，用�
 
 - **设置categories**
 
-`hexo page new "Categories"`
+`hexo new page "Categories"`
 
 这时会在source\categories文件夹下生成一个*index.md*，具体如下
 
