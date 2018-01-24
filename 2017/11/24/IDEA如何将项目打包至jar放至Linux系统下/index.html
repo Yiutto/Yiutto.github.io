@@ -6,19 +6,25 @@
   <title>idea如何将项目打包至jar放至linux系统下 | Programming prodigal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
+  <meta name="keywords" content="IDEAscalamaven" />
   
   
   
-  <meta property="og:type" content="article">
+  
+  <meta name="description" content="新建好的maven工程，为了方便在Linux环境中运行，将其打包成jar格式，用spark-submit命令放在spark集群环境下运行，为了方便后期忘事，作此笔记">
+<meta name="keywords" content="IDEA,scala,maven">
+<meta property="og:type" content="article">
 <meta property="og:title" content="IDEA如何将项目打包至jar放至Linux系统下">
 <meta property="og:url" content="http://github.com/2017/11/24/IDEA如何将项目打包至jar放至Linux系统下/index.html">
 <meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="新建好的maven工程，为了方便在Linux环境中运行，将其打包成jar格式，用spark-submit命令放在spark集群环境下运行，为了方便后期忘事，作此笔记">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://github.com/gallery/">
-<meta property="og:updated_time" content="2017-11-24T08:09:56.397Z">
+<meta property="og:image" content="http://github.com/gallery/idea.jpg">
+<meta property="og:updated_time" content="2018-01-24T06:19:38.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IDEA如何将项目打包至jar放至Linux系统下">
-<meta name="twitter:image" content="http://github.com/gallery/">
+<meta name="twitter:description" content="新建好的maven工程，为了方便在Linux环境中运行，将其打包成jar格式，用spark-submit命令放在spark集群环境下运行，为了方便后期忘事，作此笔记">
+<meta name="twitter:image" content="http://github.com/gallery/idea.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
   
@@ -168,8 +174,8 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="/gallery/" rel="gallery_cjb67o4ef0008okqqe5pnn68j">
-        <img src="/gallery/" itemprop="image">
+      <a class="article-gallery-img fancybox" href="/gallery/idea.jpg" rel="gallery_cjb67o4ef0008okqqe5pnn68j">
+        <img src="/gallery/idea.jpg" itemprop="image">
       </a>
     
   </div>
@@ -194,8 +200,14 @@
 	  <time datetime="2017-11-24T08:09:56.000Z" itemprop="datePublished">2017-11-24</time>
 	</a>
 </td>
-		  <td></td>
-		  <td></td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IDEA/">IDEA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li></ul>
+</td>
 		  <td>
 	<a class="article-views">
 	<span id="busuanzi_container_page_pv">
@@ -208,7 +220,27 @@
     </div>  
   
 	<div class="article-entry" itemprop="articleBody">
-        <a id="more"></a>
+        <p>新建好的maven工程，为了方便在Linux环境中运行，将其打包成jar格式，用<code>spark-submit</code>命令放在spark集群环境下运行，为了方便后期忘事，作此笔记</p>
+<a id="more"></a>
+<h1 id="IDEA将maven工程打包"><a href="#IDEA将maven工程打包" class="headerlink" title="IDEA将maven工程打包"></a>IDEA将maven工程打包</h1><p>单击<code>File</code>-&gt;<code>Project Structure</code>-&gt;<code>Artifacts</code>，</p>
+<p><img src="/gallery/scala-jar/jar1.png" alt="Jar打包"><br><img src="/gallery/scala-jar/jar2.png" alt="Jar打包"></p>
+<p>选择自己需要打包的main函数，</p>
+<p><img src="/gallery/scala-jar/jar3.png" alt="Jar打包"><br><img src="/gallery/scala-jar/jar4.png" alt="Jar打包"></p>
+<p>这里以<code>getLineMain</code>为例，上图中箭头1表示的是主函数的类，这个后期在linux环境中运行需要用到。箭头2中的路径最好重新配置一下，其中<code>META-INF/MANIFEST.MF</code>的文件路径最好设置在<code>src</code>路径下: <code>...\src\MF-IDF\jar的名字</code></p>
+<p><img src="/gallery/scala-jar/jar5.png" alt="Jar打包"></p>
+<p>点击OK后，继续配置相关路径<br><img src="/gallery/scala-jar/jar6.png" alt="Jar打包"></p>
+<p>将上图箭头1，2，3的名字重新命名，具体如下图。<strong>jar的名字一定要统一</strong><br><img src="/gallery/scala-jar/jar7.png" alt="Jar打包"></p>
+<p>点击ok，你会在工程的目录下看见生成了一个刚刚设置路径的文件夹<code>MF-INF</code><br><img src="/gallery/scala-jar/jar8.png" alt="Jar打包"></p>
+<p>别以为这样就完了，点击<code>Build</code>-&gt;<code>Build Artifacts...</code>，选好自己的jar包<br><img src="/gallery/scala-jar/jar9.png" alt="Jar打包"></p>
+<p>在<code>out</code>文件夹下可以发现jar文件<br><img src="/gallery/scala-jar/jar10.png" alt="Jar打包"></p>
+<h1 id="将jar文件放置Linux的spark集群上"><a href="#将jar文件放置Linux的spark集群上" class="headerlink" title="将jar文件放置Linux的spark集群上"></a>将jar文件放置Linux的spark集群上</h1><p>此时你需要一个sh脚本，方便后台运行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">zip -d getBaseLine.jar META-INF/*.RSA META-INF/*.DSA META-INF/*.SF</div><div class="line">nohup spark-submit --class trafficLine.getLineMain getBaseLine.jar &gt;&gt; /home/spark/DataminingServer/logs/yiutto/Yt_ntProcess.log 2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p><code>nohup</code>为LINUX命令用法，不挂断地运行命令，要运行后台中的 <code>nohup</code> 命令，添加 <code>&amp;</code>( 表示”and”的符号)到命令的尾部。</p>
+<blockquote>
+<p>1.查看运行的后台进程<code>jobs -l</code>，jobs命令只看当前终端生效的，关闭终端后，在另一个终端jobs已经无法看到后台跑得程序了，此时利用ps（进程查看命令）<br>2.<code>ps -ef</code>, 用<code>ps -def | grep</code>查找进程很方便，注：用<code>ps -def | grep</code>查找进程很方便，最后一行总是会grep自己，用grep -v参数可以将grep命令排除掉<br>3.再用awk提取进程ID，<code>ps -aux|grep chat.js| grep -v grep | awk &#39;{print $2}&#39;</code></p>
+</blockquote>
+<p><a href="http://www.cnblogs.com/baby123/p/6477429.html" target="_blank" rel="external">nohup和&amp;后台运行，进程查看及终止</a></p>
+<p><code>/home/spark/DataminingServer/logs/yiutto/Yt_ntProcess.log</code>是我的日志路径</p>
 
 		<div style="text-align:center;color: #ccc;font-size:17px;">
 		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
@@ -289,7 +321,7 @@ var a = new Donate({
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-        <ol class="nav">None</ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IDEA将maven工程打包"><span class="nav-number">1.</span> <span class="nav-text">IDEA将maven工程打包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将jar文件放置Linux的spark集群上"><span class="nav-number">2.</span> <span class="nav-text">将jar文件放置Linux的spark集群上</span></a></li></ol>
     
     </div>
   </aside>
@@ -303,7 +335,7 @@ var a = new Donate({
   <div class="container">
       	<div class="row">
 	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2017 - 2017 Programming prodigal All Rights Reserved.</p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2018 Programming prodigal All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -461,7 +493,7 @@ var a = new Donate({
             Programming prodigal
           </div>
           <div class="panel-body">
-            Copyright © 2017 Yiutto All Rights Reserved.
+            Copyright © 2018 Yiutto All Rights Reserved.
           </div>
         </div>
       </div>
