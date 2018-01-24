@@ -1167,8 +1167,30 @@ if __name__=='__main__':
     plot_results(point_by_point_predictions,y_test,'point_by_point_predictions')
 ```
 
+# QUESTION:
+
+1.到现在也搞不懂是什么时候检测白噪声序列，是检测差分后的时间序列，还是差分后的残差。网上文档不一啊，坑人mmd。
+2.ARMA(ts, (p, q))中的ts是原时间序列，还是经过差分后的时间序列，为啥网上一些博客，有的时候是原时间序列，有的时候是经过差分后的时间序列。
+3.ARIMA(ts, (p,d,q)选择p，q时，老是会报错。写个循环把，又tam的特别慢
+4.R语言里面mmd的就有一个auto.arima()自动获取ARIMA模型，妈的为啥python没有，cao
+5.网上的一些狗屁教程标题上写的时ARIMA，实际上里面先作一系列差分操作，然后又用ARMA模型判断选择ｐ、ｑ，你妹妹的。丫的，自己傻傻分不清还教别人
+
+# SUMMARY
+1.首先，拿到数据先把它转换为timeseries
+2.判断是否平稳，画个图先预判一下，实际操作可以用adf值（python中用这个函数`sm.tsa.stattools.adfuller(ts)`）
+> 看`Test Statistic Value`是不是要小于这3个`Critical Value(1%)`、`Critical Value(5%)`、`Critical Value(10%)`对应的值
+> p-value小于0.05
+3.不平稳的话可以进行（对数log、差分diff等）
+4.差分后再重复步骤2，一般来说差分一次就基本平稳了，然后就是选择p、q参数了，网上又好多代码自动选择，到时如果迭代次数过多的话，卡死你。要想快速人工进行筛选的话，可以用2个函数`acf()`和`pcf()`画个图，自己看一下，进行个初步筛选q值和p值。
+5.白噪声检验（(说白了白噪声就是不相关的随机变量序列，怎么理解呢？)[https://zhuanlan.zhihu.com/p/26227700]）就是Ljung-Box 指标。这个指标可对每一个时间序列的延迟进行显著性的评估。判定技巧是，P-value点的高度越高，随机的可能性越大，我们的模型越可信。所谓自相关是当期值和往期值有线性关系，一般时间序列建模要求残差是独立同分布的白噪声序列，如果残差存在自相关也说明变量的信息没被模型挖空。
+	
+
+
 # 来源:
 相关博客：
+(ARIMA模型文档)[http://www.statsmodels.org/stable/generated/statsmodels.tsa.arima_model.ARIMA.html]
+(用ARIMA模型做需求预测)[https://www.jianshu.com/p/f547bb4b50c3?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation]
+
 
 http://www.cnblogs.com/foley/p/5582358.html
 
