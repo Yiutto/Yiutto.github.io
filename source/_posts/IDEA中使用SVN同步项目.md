@@ -66,4 +66,9 @@ tags:
 点击`Merge`后进入如下界面，左侧为本地代码，右侧为远程仓库代码，中间为合并后的结果,点击`Apply`确定合并代码。
 
  ![svn](/gallery/IntelliJ-IDEA-Maven-Scala/svn8.png)
+
+
+# Refrence
+http://www.cnblogs.com/zhanghaoliang/p/6206948.html
+http://blog.csdn.net/qq_27093465/article/details/51580290
  

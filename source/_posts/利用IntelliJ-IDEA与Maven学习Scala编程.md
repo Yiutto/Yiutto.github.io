@@ -45,6 +45,13 @@ tags:
 随后打开的页面会显示出IntelliJ IDEA当前已安装的插件列表，现在我们要安装Scala插件，所以点击页面左下方的`Install JetBrains plugin...`按钮，然后来到安装插件的页面，如果网络正常的话，在页面左上方的搜索框内搜索"scala"，即可出现Scala插件的安装界面，点击右侧页面中的`Install`进行安装后，可以看到安装的进度条，如下图所示：
 ![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/idea4.png)
 
+**PS:**这里也可以手动下载，scala插件离线下载地址：[https://plugins.jetbrains.com/plugin/1347-scala](https://plugins.jetbrains.com/plugin/1347-scala) 然后根据Update日期去找Intellij IDEA对应得scala插件，不同版本的IDEA对应的scala插件不一样，请务必下载对应的scala插件否则无法识别。 
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/scala-add1.png)
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/scala-add2.png)
+
+离线插件下载完成后，将离线scala插件通过如下方式加入到IDEA中去：点击Install plugin from disk…,然后找到你scala插件的zip文件的本机磁盘位置，点ok即可，导入后会要求重启IDEA
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/scala-add3.png)
+
 但是如果你在公司内网，这个时候你可能需要配置代理，步骤如下图所示，在图中的`Host name`和`Port number`中填写公司自己的代理即可，如果需要，在下方的账号和密码框中按情况 填写上相应信息。填写完毕，记得先检查一下是否能够正确连上外部网络，可以点击图中的`Check connection`，输入一个外网的地址，比如www.baidu.com是否正确配置了。一切正常后，点击`OK`退出即可。然后按照上一步中不需要配置代理的情况下，进行Scala插件的安装。
 ![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/idea5.png)
 
@@ -74,6 +81,12 @@ tags:
 
 在欢迎界面点击`Create New Project`，在打开的页面左侧边栏中，选择`Maven`，然后在右侧的`Project SDK`一项中，查看是否是正确的JDK配置项（如果每一步严格按照上文中的步骤操作的话，正常来说这一栏会自动填充的，因为我们之前在1.3中已经配置过了全局的Project JDK了，如果这里没有正常显示JDK的话，可以点击右侧的`New...`按钮，然后指定JDK安装路径的根目录即可），然后点击`Next`，来到Maven项目最重要三个参数的设置页面，这三个参数分别为：`GroupId`, `ArtifactId`和`Version`。
 
+>（**这里只是创建Scala的演示**）
+> 注意：按照我步骤顺序即可。 
+> 注意：如果是第一次利用maven构建scala开发spark环境的话，这里面的会有一个选择scala SDK和Module SDK的步骤，这里路径选择你安装scala时候的路径和jdk的路径就可以了。
+
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/scala-add4.png)
+
 为了更好的解释这三个字段，用Spark 1.6.2的核心组件的Maven标识符为例来进行讲解。
 ``` Scala
 	<groupId>org.apache.spark</groupId>
@@ -81,9 +94,9 @@ tags:
 	<version>1.6.2</version>
 ```
 
- - GroupId，可以理解为用来标志你整个项目组的，或者你这些代码属于某一个完整的项目比如上面的`org.apache.spark`就可以非常好的来标志Apache的Spark这个项目了。一般来说可以使用倒序的公司网址来作为GroupId，这可以类比为，沿袭了Java项目中使用倒序公司网址来作为Package名称的一个惯例。
- - ArtifactId，一般是用来在整个项目组来标志本项目的，相比GroupId的范围，其概念要稍微小一些，比如`spark-core_2.11`就非常好的表示出了本项目主要是关于Spark的核心基础组件的，从而能够与Spark其他各种组件或架构很好的区分开来。
- - Version，正如字面意思，就是本项目的迭代版本的信息，如上面的`1.6.2`。
+ - **GroupId**，可以理解为用来标志你整个项目组的，或者你这些代码属于某一个完整的项目比如上面的`org.apache.spark`就可以非常好的来标志Apache的Spark这个项目了。一般来说可以使用倒序的公司网址来作为GroupId，这可以类比为，沿袭了Java项目中使用倒序公司网址来作为Package名称的一个惯例。
+ - **ArtifactId**，一般是用来在整个项目组来标志本项目的，相比GroupId的范围，其概念要稍微小一些，比如`spark-core_2.11`就非常好的表示出了本项目主要是关于Spark的核心基础组件的，从而能够与Spark其他各种组件或架构很好的区分开来。
+ - **Version**，正如字面意思，就是本项目的迭代版本的信息，如上面的`1.6.2`。
  
 现在，比如你的公司名称叫做`abc`，然后你的项目组叫做`test`，那就可以使用`com.abc.test`来作为`GroupId`，然后将`ArtifactId`取做`myFirstProject`，版本号就使用它默认的就好了（当然，如果你的项目以后有迭代更新版本的话，这个是需要按照实际情况进行改动的）。这三个字段设置完毕后，点击`Next`，来到项目名称设置页面，一般可以和`ArtifactId`字段保持一致，当然也可以不一致，这个只是为了给本项目取个名字而已。
 
@@ -120,6 +133,37 @@ tags:
 至此，整个的IntelliJ IDEA安装与配置，以及基本的Maven工程创建流程，就全然结束了，写的比较啰嗦，一个很简单的IDE使用问题，嚼了这么多口舌，不过啰嗦之外，若果真对各位好学的你们，有稍稍的竟然之外的益处，那也就不枉我这么苦逼的制作这些Gif动图了。
 
 此外，本文只介绍了一些最基本的内容，关于IntelliJ IDEA和Maven的更为细致的内容，以及关于如何在本地写一个Spark程序都还没有提到，不着急，后续我会慢慢更新。
+
+# 遇到的坑
+
+新建号maven工程后，`pom.xl`文件导入完成后，新建一个HelloWorld工程，运行报错
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/error.png)
+
+我怀疑是我的Scala版本和IDEA版本冲突问题，继续回到`pom.xl`文件看看。
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/pom.png)
+
+我去，这版本太低了把，我来看看我本地装的Scala，我记得是2.11.7版本，如下图，
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/scala-version.png)
+
+把`pom.xl`文件版本改一下试试，重新reimport
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/pom1.png)
+
+# 更改maven的setting.xml文件的镜像源
+
+由于国内的鸟网速太慢了，好多respository下载特别慢，我用的是IDEA自带的maven3，找到`settings.xml`,更改`mirrors`
+
+![IntelliJ IDEA](/gallery/IntelliJ-IDEA-Maven-Scala/maven-setting1.png)
+
+以下为阿里云镜像的设置代码
+
+```
+   <mirror>
+      <id>alimaven</id>
+      <name>aliyun maven</name>      
+	  <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+```
 
 # References:
 1. [https://github.com/judasn/IntelliJ-IDEA-Tutorial](https://github.com/judasn/IntelliJ-IDEA-Tutorial)  非常好的教程！！！
