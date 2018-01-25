@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python字符串的encode与decode研究心得 | Programming prodigal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="python" />
+  
+  
+  
+  
+  <meta name="description" content="为什么Python使用过程中会出现各式各样的乱码问题，明明是中文字符却显示成“/xe4/xb8/xad/xe6/x96/x87”的形式？为什么会报错“UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 0-1: ordinal not in range(128)”？本文就来研究一下这个问题。">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python字符串的encode与decode研究心得">
+<meta property="og:url" content="http://github.com/2018/01/25/Python字符串的encode与decode研究心得/index.html">
+<meta property="og:site_name" content="Programming prodigal">
+<meta property="og:description" content="为什么Python使用过程中会出现各式各样的乱码问题，明明是中文字符却显示成“/xe4/xb8/xad/xe6/x96/x87”的形式？为什么会报错“UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 0-1: ordinal not in range(128)”？本文就来研究一下这个问题。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://github.com/gallery/python.png">
+<meta property="og:updated_time" content="2018-01-25T02:59:51.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python字符串的encode与decode研究心得">
+<meta name="twitter:description" content="为什么Python使用过程中会出现各式各样的乱码问题，明明是中文字符却显示成“/xe4/xb8/xad/xe6/x96/x87”的形式？为什么会报错“UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 0-1: ordinal not in range(128)”？本文就来研究一下这个问题。">
+<meta name="twitter:image" content="http://github.com/gallery/python.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Programming prodigal" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/logo.png">
+  <link rel="apple-touch-icon" href="/css/images/logo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 border-width: 0px;  margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="176px" height="78px" alt="Hike News" src="/css/images/logo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/mybooks">books</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/favorites">favorites</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Python字符串的encode与decode研究心得" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/gallery/python.png" rel="gallery_cjctvxfsm000iooqqtsalv5b0">
+        <img src="/gallery/python.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python字符串的encode与decode研究心得
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+	  <table style="margin:0 auto;">
+		<tr>
+		  <td>
+	<a href="/2018/01/25/Python字符串的encode与decode研究心得/" class="article-date">
+	  <time datetime="2018-01-25T02:31:26.000Z" itemprop="datePublished">2018-01-25</time>
+	</a>
+</td>
+		  <td>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+</td>
+		  <td>
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+</td>
+		  <td>
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+</td>
+		</tr>
+	  </table>
+    </div>  
+  
+	<div class="article-entry" itemprop="articleBody">
+        <p>为什么Python使用过程中会出现各式各样的乱码问题，明明是中文字符却显示成“/xe4/xb8/xad/xe6/x96/x87”的形式？为什么会报错<strong>“UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 0-1: ordinal not in range(128)”？</strong>本文就来研究一下这个问题。<br><a id="more"></a></p>
+<h1 id="理解decode和encode"><a href="#理解decode和encode" class="headerlink" title="理解decode和encode"></a>理解decode和encode</h1><p>字符串在Python内部的表示是<code>unicode</code>编码，因此，在做编码转换时，通常需要以<code>unicode</code>作为中间编码，即先将其他编码的字符串解码（decode）成unicode，再从unicode编码（encode）成另一种编码。 </p>
+<blockquote>
+<p><code>decode</code>的作用是将其他编码的字符串转换成unicode编码，如str1.decode(‘gb2312’)，表示将gb2312编码的字符串str1转换成unicode编码。<br><code>encode</code>的作用是将unicode编码转换成其他编码的字符串，如str2.encode(‘gb2312’)，表示将unicode编码的字符串str2转换成gb2312编码。</p>
+</blockquote>
+<p><strong>因此，转码的时候一定要先搞明白，字符串str是什么编码，然后decode成unicode，然后再encode成其他编码</strong></p>
+<h1 id="代码中字符串的默认编码与代码文件本身的编码一致。"><a href="#代码中字符串的默认编码与代码文件本身的编码一致。" class="headerlink" title="代码中字符串的默认编码与代码文件本身的编码一致。"></a>代码中字符串的默认编码与代码文件本身的编码一致。</h1><ul>
+<li><p>如：<code>s=&#39;中文&#39;</code>如果是在<code>utf8</code>的文件中，该字符串就是<code>utf8</code>编码，如果是在<code>gb2312</code>的文件中，则其编码为<code>gb2312</code>。这种情况下，要进行编码转换，都需要先用<code>decode</code>方法将其转换成<code>unicode</code>编码，再使用<code>encode</code>方法将其转换成其他编码。通常，在没有指定特定的编码方式时，都是使用的系统默认编码创建的代码文件。 </p>
+</li>
+<li><p>如果字符串是这样定义：<code>s=u&#39;中文&#39;</code>则该字符串的编码就被指定为<code>unicode</code>了，即<code>python</code>的内部编码，而与代码文件本身的编码无关。因此，对于这种情况做编码转换，只需要直接使用encode方法将其转换成指定编码即可。</p>
+</li>
+</ul>
+<ul>
+<li>如果一个字符串已经是<code>unicode</code>了，再进行解码则将出错，因此通常要对其编码方式是否为unicode进行判断：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line">isinstance(s, unicode)  <span class="comment">#用来判断是否为unicode</span></div></pre></td></tr></table></figure>
+<p><strong>用非unicode编码形式的str来encode会报错</strong> </p>
+<h1 id="如何获得系统的默认编码？"><a href="#如何获得系统的默认编码？" class="headerlink" title="如何获得系统的默认编码？"></a>如何获得系统的默认编码？</h1><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">print</span> sys.getdefaultencoding()</div></pre></td></tr></table></figure>
+<p>该段程序在英文WindowsXP上输出为：<code>ascii</code><br>在某些IDE中，字符串的输出总是出现乱码，甚至错误，其实是由于IDE的结果输出控制台自身不能显示字符串的编码，而不是程序本身的问题。 </p>
+<p>如在UliPad中运行如下代码：<br><figure class="highlight python"><table><tr><td class="code"><pre><div class="line">s=<span class="string">u"中文"</span></div><div class="line"><span class="keyword">print</span> s</div></pre></td></tr></table></figure></p>
+<p>会提示：<strong>UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 0-1: ordinal not in range(128)</strong>。这是因为UliPad在英文WindowsXP上的控制台信息输出窗口是按照ascii编码输出的（英文系统的默认编码是ascii），而上面代码中的字符串是Unicode编码的，所以输出时产生了错误。</p>
+<p>将最后一句改为：<code>print s.encode(&#39;gb2312&#39;)</code>, 则能正确输出<code>“中文”</code>两个字。<br>若最后一句改为：<code>print s.encode(&#39;utf8&#39;)</code> 则输出：<code>/xe4/xb8/xad/xe6/x96/x87</code>，这是控制台信息输出窗口按照<code>ascii</code>编码输出<code>utf8</code>编码的字符串的结果。</p>
+<p><code>unicode(str,&#39;gb2312&#39;)</code>与<code>str.decode(&#39;gb2312&#39;)</code>是一样的，都是将<code>gb2312</code>编码的<code>str</code>转为<code>unicode</code>编码，使用<code>str.__class__</code>可以查看str的编码形式</p>
+<p>原理说了半天，最后来个包治百病的吧：）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python  </span></div><div class="line"><span class="comment">#coding=utf-8  </span></div><div class="line">s=<span class="string">"中文"</span>  </div><div class="line"> </div><div class="line"><span class="keyword">if</span> isinstance(s, unicode):  </div><div class="line">	<span class="comment">#s=u"中文"  </span></div><div class="line">	<span class="keyword">print</span> s.encode(<span class="string">'gb2312'</span>)  </div><div class="line"><span class="keyword">else</span>:  </div><div class="line">	<span class="comment">#s="中文"  </span></div><div class="line">	<span class="keyword">print</span> s.decode(<span class="string">'utf-8'</span>).encode(<span class="string">'gb2312'</span>)</div></pre></td></tr></table></figure>
+<h1 id="工作中遇到的’UTF8’-CODEC-CAN’T-DECODE-BYTE-0XD1-IN-POSITION-931-INVALID-CONTINUATION-BYTE解决方法"><a href="#工作中遇到的’UTF8’-CODEC-CAN’T-DECODE-BYTE-0XD1-IN-POSITION-931-INVALID-CONTINUATION-BYTE解决方法" class="headerlink" title="工作中遇到的’UTF8’ CODEC CAN’T DECODE BYTE 0XD1 IN POSITION 931: INVALID CONTINUATION BYTE解决方法"></a>工作中遇到的’UTF8’ CODEC CAN’T DECODE BYTE 0XD1 IN POSITION 931: INVALID CONTINUATION BYTE解决方法</h1><p>有时候，我得到这样的字符œ导致的UnicodeDecodeError错误。我需要能够使串的UTF-8有或没有这些字符。</p>
+<p>在工作中，经常遇到，读取一个文件，或者是从网页获取一个问题，明明看着是gb2312的编码，可是当使用decode转时，总是出错，这个时候，可以使用decode(‘gb18030′)这个字符集来解决，如果还是有问题，这个时候，一定要注意，decode还有一个参数，比如，若要将某个 String对象s从gbk内码转换为UTF-8，可以如下操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">s.decode(‘gbk’).encode(‘utf-8′)</div></pre></td></tr></table></figure>
+<p>可是，在实际开发中，我发现，这种办法经常会出现异常：<strong>UnicodeDecodeError: ‘gbk’ codec can’t decode bytes in position 30664-30665: illegal multibyte sequence</strong>。这是因为遇到了非法字符——尤其是在某些用C/C++编写的程序中，全角空格往往有多种不同的实现方式，比如\xa3\xa0，或者\xa4\x57，这些字符，看起来都是全角空格，但它们并不是“合法”的全角空格（真正的全角空格是\xa1\xa1），因此在转码的过程中出现了异常。这样的问题很让人头疼，因为只要字符串中出现了一个非法字符，整个字符串——有时候，就是整篇文章——就都无法转码。</p>
+<p>解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">s.decode(‘gbk’, ‘ignore’).encode(‘utf-8′)</div></pre></td></tr></table></figure>
+<p>因为decode的函数原型是<code>decode([encoding], [errors=&#39;strict&#39;])</code>，可以用第二个参数控制错误处理的策略，默认的参数就是<code>strict</code>，代表遇到非法字符时抛出异常；</p>
+<ul>
+<li>如果设置为ignore，则会忽略非法字符；</li>
+<li>如果设置为replace，则会用?取代非法字符；</li>
+<li>如果设置为xmlcharrefreplace，则使用XML的字符引用。</li>
+</ul>
+
+		<div style="text-align:center;color: #ccc;font-size:17px;">
+		 ^_^ This article ends <i class="fa fa-paw"></i> Thank you for reading ^_^ 
+	</div>  
+  
+    
+    <footer class="entry-meta entry-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Wepay.png',
+  alipayImage: 'https://raw.githubusercontent.com/Yiutto/BlogImage/master/Alipay.png'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTcwNS84MjY5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+	  <hr class="entry-footer-hr">
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/14/TimeSeries-Study/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">TimeSeries-Study</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解decode和encode"><span class="nav-number">1.</span> <span class="nav-text">理解decode和encode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码中字符串的默认编码与代码文件本身的编码一致。"><span class="nav-number">2.</span> <span class="nav-text">代码中字符串的默认编码与代码文件本身的编码一致。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何获得系统的默认编码？"><span class="nav-number">3.</span> <span class="nav-text">如何获得系统的默认编码？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工作中遇到的’UTF8’-CODEC-CAN’T-DECODE-BYTE-0XD1-IN-POSITION-931-INVALID-CONTINUATION-BYTE解决方法"><span class="nav-number">4.</span> <span class="nav-text">工作中遇到的’UTF8’ CODEC CAN’T DECODE BYTE 0XD1 IN POSITION 931: INVALID CONTINUATION BYTE解决方法</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2018 Programming prodigal All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/mybooks" class="mobile-nav-link">Books</a>
+  
+    <a href="/favorites" class="mobile-nav-link">Favorites</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Programming prodigal
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Yiutto All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
