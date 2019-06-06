@@ -234,6 +234,9 @@
 <p>选好8u101版本后，再选择你的对应开发平台，由于我的机器是64位的，所以我这里选择Windows64位的版本。记得在下载之前，必须要接受上方的许可协议，在上图中用红色圈出。</p>
 <p>除了下载最新版本的JDK，也可以在<a href="http://www.oracle.com/technetwork/java/javase/archive-139210.html" target="_blank" rel="external">Oracle Java Archive</a>下载到历史版本的JDK，但官方建议只做测试用。</p>
 <p>JDK在windows下的安装非常简单，按照正常的软件安装思路去双击下载得到的exe文件，然后设定你自己的安装目录（安装目录在设置环境变量的时候需要用到）即可。</p>
+<p>变量名：CLASSPATH 变量值：.;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib; </p>
+<p>变量名：JAVA_HOME 变量值：D:\Java\jdk1.8.0_45 </p>
+<p>变量名：Path 变量值：.;%JAVA_HOME%\bin;%JAVA_HOME%\lib;</p>
 <h2 id="1-2-环境变量的设置"><a href="#1-2-环境变量的设置" class="headerlink" title="1.2 环境变量的设置"></a>1.2 环境变量的设置</h2><p>接下来设置相应的环境变量，设置方法为：在桌面右击【计算机】－－【属性】－－【高级系统设置】，然后在系统属性里选择【高级】－－【环境变量】，然后在系统变量中找到<strong>“Path”</strong>变量，并选择<strong>“编辑”</strong>按钮后出来一个对话框，可以在里面添加上一步中所安装的JDK目录下的<code>bin</code>文件夹路径名，我这里的<code>bin</code>文件夹路径名是：<code>F:\Program Files\Java\jdk1.8.0_101\bin</code>，所以将这个添加到<code>path</code>路径名下，注意用英文的分号<strong>“;”</strong>进行分割。这样设置好后，便可以在任意目录下打开的cmd命令行窗口下运行</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line">java -version</div></pre></td></tr></table></figure>
 <p>观察是否能够输出相关java的版本信息，如果能够输出，说明JDK安装这一步便全部结束了。</p>
