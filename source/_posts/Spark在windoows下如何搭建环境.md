@@ -36,7 +36,11 @@ JDK（全称是JavaTM Platform Standard Edition Development Kit）的安装，�
 除了下载最新版本的JDK，也可以在[Oracle Java Archive](http://www.oracle.com/technetwork/java/javase/archive-139210.html)下载到历史版本的JDK，但官方建议只做测试用。
 
 JDK在windows下的安装非常简单，按照正常的软件安装思路去双击下载得到的exe文件，然后设定你自己的安装目录（安装目录在设置环境变量的时候需要用到）即可。
-
+```
+变量名：CLASSPATH 变量值：.;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib; 
+变量名：JAVA_HOME 变量值：D:\Java\jdk1.8.0_45 
+变量名：Path 变量值：.;%JAVA_HOME%\bin;%JAVA_HOME%\lib;
+```
 
 ## 1.2 环境变量的设置
 
